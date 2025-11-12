@@ -59,6 +59,43 @@ def show_all_contacts(args, book: AddressBook):
     return contacts
 
 @input_error
+def add_email_cmd(args, book):
+    name, email = args
+    record = book.find(name)
+    if record is None:
+        from include.record import Record
+        record = Record(name)
+        book.add_record(record)
+    record.add_email(email)
+    return "Email added."
+
+@input_error
+def change_email_cmd(args, book):
+    name, old_e, new_e = args
+    record = book.find(name)
+    if record is None:
+        raise KeyError("Contact not found")
+    record.edit_email(old_e, new_e)
+    return "Email updated."
+
+@input_error
+def delete_email_cmd(args, book):
+    name, e = args
+    record = book.find(name)
+    if record is None:
+        raise KeyError("Contact not found")
+    record.remove_email(e)
+    return "Email removed."
+
+@input_error
+def show_email_cmd(args, book):
+    name = args[0]
+    record = book.find(name)
+    if record is None:
+        raise KeyError("Contact not found")
+    return ", ".join(e.value for e in record.emails) if record.emails else "—"
+
+@input_error
 def add_birthday(args, book: AddressBook):
     if len(args) != 2:
         return "Invalid number of arguments. Usage: add-birthday [name] [date]"
@@ -117,6 +154,14 @@ def main():
                 print(change_contact(args, book))
             case "phone":
                 print(show_phone(args, book))
+            case "add-email":
+                print(add_email_cmd(args, book))
+            case "change-email":
+                print(change_email_cmd(args, book))
+            case "delete-email":
+                print(delete_email_cmd(args, book))
+            case "show-email":
+                print(show_email_cmd(args, book))    
             case "all":
                 print(show_all_contacts(args, book))
             case "add-birthday":
