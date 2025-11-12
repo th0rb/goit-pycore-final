@@ -100,34 +100,37 @@ def main():
     book = load_data(contacts_file)
 
     print("Welcome to the assistant bot!")
-    while True:
-        user_input = input("Enter a command: ")
-        command, *args = parse_input(user_input)
+    try:
+        while True:
+            user_input = input("Enter a command: ")
+            command, *args = parse_input(user_input)
 
-        match command:
-            case "hello":
-                print("How can I help you?")
-            case "close" | "exit":
-                save_data(book, contacts_file)
-                print("Good bye!")
-                break
-            case "add":
-                print(add_contact(args, book))
-            case "change":
-                print(change_contact(args, book))
-            case "phone":
-                print(show_phone(args, book))
-            case "all":
-                print(show_all_contacts(args, book))
-            case "add-birthday":
-                print(add_birthday(args, book))
-            case "show-birthday":
-                print(show_birthday(args, book))
-            case "birthdays":
-                print(book.get_upcoming_birthdays())
-            case _:
-                print("Invalid command.")
-
+            match command:
+                case "hello":
+                    print("How can I help you?")
+                case "close" | "exit":
+                    save_data(book, contacts_file)
+                    print("Good bye!")
+                    break
+                case "add":
+                    print(add_contact(args, book))
+                case "change":
+                    print(change_contact(args, book))
+                case "phone":
+                    print(show_phone(args, book))
+                case "all":
+                    print(show_all_contacts(args, book))
+                case "add-birthday":
+                    print(add_birthday(args, book))
+                case "show-birthday":
+                    print(show_birthday(args, book))
+                case "birthdays":
+                    print(book.get_upcoming_birthdays())
+                case _:
+                    print("Invalid command.")
+    except KeyboardInterrupt:
+        save_data(book, contacts_file)
+        print("\nGood bye!")
 
 if __name__ == "__main__":
     main()
