@@ -10,7 +10,12 @@ sys.path.append(target_dir)
 from address_book import AddressBook
 from error import input_error
 from record import Record
-from storage import load_data, save_data, DEFAULT_FILENANE
+from storage import (
+    load_address_book,
+    save_address_book,
+    load_notes_book,
+    save_notes_book
+)
 import sys
 
 not_found_message = "Contact does not exist, you can add it"
@@ -97,7 +102,7 @@ def main():
         contacts_file = sys.argv[1]
     else:
         contacts_file = DEFAULT_FILENANE
-    book = load_data(contacts_file)
+    book = load_address_book()
 
     print("Welcome to the assistant bot!")
     while True:
@@ -108,7 +113,8 @@ def main():
             case "hello":
                 print("How can I help you?")
             case "close" | "exit":
-                save_data(book, contacts_file)
+                save_address_book(book) #Збeрегти контакти
+                save_notes_book("") #Збeрегти записи
                 print("Good bye!")
                 break
             case "add":
