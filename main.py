@@ -10,8 +10,8 @@ sys.path.append(target_dir)
 from adress_book import AddressBook
 from error import input_error
 from record import Record
-from storage import load_data, save_data, DEFAULT_FILENANE
-import sys
+from storage import load_data, save_data, DEFAULT_FILENAME
+
 
 not_found_message = "Contact does not exist, you can add it"
 
@@ -159,49 +159,57 @@ def parse_input(user_input):
     return cmd, *args
 
 def main():
+    contacts_file = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_FILENAME
 
-    if len(sys.argv) > 1:
-        contacts_file = sys.argv[1]
-    else:
-        contacts_file = DEFAULT_FILENANE
     book = load_data(contacts_file)
-
     print("Welcome to the assistant bot!")
-    while True:
-        user_input = input("Enter a command: ")
-        command, *args = parse_input(user_input)
 
-        match command:
-            case "hello":
-                print("How can I help you?")
-            case "close" | "exit":
-                save_data(book, contacts_file)
-                print("Good bye!")
-                break
-            case "add":
-                print(add_contact(args, book))
-            case "change":
-                print(change_contact(args, book))
-            case "phone":
-                print(show_phone(args, book))
-            case "add-email":
-                print(add_email_cmd(args, book))
-            case "change-email":
-                print(change_email_cmd(args, book))
-            case "delete-email":
-                print(delete_email_cmd(args, book))
-            case "show-email":
-                print(show_email_cmd(args, book))    
-            case "all":
-                print(show_all_contacts(args, book))
-            case "add-birthday":
-                print(add_birthday(args, book))
-            case "show-birthday":
-                print(show_birthday(args, book))
-            case "birthdays":
-                print(book.get_upcoming_birthdays())
-            case _:
-                print("Invalid command.")
+    try:
+        while True:
+            user_input = input("Enter a command: ")
+            command, *args = parse_input(user_input)
+
+            match command:
+                case "hello":
+                    print("How can I help you?")
+                case "close" | "exit":
+                    print("Good bye!")
+                    break
+
+                case "add":
+                    print(add_contact(args, book))
+                case "change":
+                    print(change_contact(args, book))
+                case "phone":
+                    print(show_phone(args, book))
+                case "all":
+                    print(show_all_contacts(args, book))
+
+                # Email
+                case "add-email":
+                    print(add_email_cmd(args, book))
+                case "change-email":
+                    print(change_email_cmd(args, book))
+                case "delete-email":
+                    print(delete_email_cmd(args, book))
+                case "show-email":
+                    print(show_email_cmd(args, book))
+
+                # Days & birthdays
+                case "add-birthday":
+                    print(add_birthday(args, book))
+                case "show-birthday":
+                    print(show_birthday(args, book))
+                case "birthdays":
+                    print(book.get_upcoming_birthdays())
+
+                case _:
+                    print("Invalid command.")
+    except KeyboardInterrupt:
+        print("\nGood bye!")
+    finally:
+        # зберігаємо у будь-якому разі
+        save_data(book, contacts_file)
 
 
 if __name__ == "__main__":
