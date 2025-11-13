@@ -2,7 +2,7 @@ from pathlib import Path
 import pickle
 
 from address_book import AddressBook
-from notes import NotesBook
+#from notes import NotesBook
 
 
 # Папка користувача для зберігання всіх даних помічника
