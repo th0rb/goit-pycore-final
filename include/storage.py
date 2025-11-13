@@ -2,7 +2,7 @@ from pathlib import Path
 import pickle
 
 from address_book import AddressBook
-from notes import NotesBook
+#from notes import NotesBook
 
 
 # Папка користувача для зберігання всіх даних помічника
@@ -22,6 +22,8 @@ def save_data(data, file_path):
     ensure_data_dir()
     with open(file_path, "wb") as file:
         pickle.dump(data, file)
+        print("Saved 1!")
+    print("Saved 2!")
 
 
 def load_data(file_path, factory):
