@@ -1,3 +1,4 @@
+#test test
 from pathlib import Path
 import pickle
 
@@ -11,8 +12,6 @@ DATA_DIR = Path.home() / ".assistant_data"
 # Окремі файли для контактів і нотаток
 CONTACTS_FILE = DATA_DIR / "contacts.bin"
 NOTES_FILE = DATA_DIR / "notes.bin"
-
-#test
 
 def ensure_data_dir():
     #Створює директорію для даних, якщо її ще немає.
