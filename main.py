@@ -99,7 +99,7 @@ def parse_input(user_input):
 def main():
     # Завантажуємо книги контактів і нотаток
     book = load_address_book() #Завантаження Контактів.
-    notes_book = load_notes_book() #Завантаження Контактів.
+    #notes_book = load_notes_book() #Завантаження Нотатків.
 
     print("Welcome to the assistant bot!")
 
@@ -114,7 +114,7 @@ def main():
                 case "close" | "exit":
                     # Зберігаємо контакти й нотатки перед виходом
                     save_address_book(book) #Збереження Контактів.
-                    save_notes_book(notes_book) #Збереження Нотаток.
+                    #save_notes_book(notes_book) #Збереження Нотаток.
                     print("Good bye!")
                     break
                 case "add":
@@ -136,7 +136,7 @@ def main():
     except KeyboardInterrupt:
         # Якщо користувач натиснув Ctrl+C — теж зберігаємо
         save_address_book(book)
-        save_notes_book(notes_book)
+        #save_notes_book(notes_book)
         print("\nGood bye!")
 
 if __name__ == "__main__":
