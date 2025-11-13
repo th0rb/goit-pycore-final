@@ -20,37 +20,32 @@ def add_contact(args, book: AddressBook):
     name, phone = args
     record = book.find(name)
     message = "Contact updated."
-
     if record is None:
         record = Record(name)
         book.add_record(record)
         message = "Contact added."
-
     if phone:
-        # перевірка: цей номер не має використовуватися іншим контактом
-        if book.is_phone_taken(phone, exclude_name=name):
-            return "Phone is already used by another contact."
+        if book.is_phone_taken(phone):
+            return "Цей номер уже використовується іншим контактом."
         record.add_phone(phone)
-
     return message
 
 
 @input_error
 def change_contact(args, book: AddressBook):
     if len(args) != 3:
-        return "Invalid number of arguments. Usage: change [name] [old_number] [new_number]"
-
+        return 'Invalid number of arguments. Usage: change [name] [old_number] [new_number]'
     name, old_number, new_number = args
     record = book.find(name)
     if record is None:
         return not_found_message
-
-    #  перевірка: новий номер не має використовуватися іншим контактом
-    if book.is_phone_taken(new_number, exclude_name=name):
-        return "Phone is already used by another contact."
-
+    if old_number == new_number:
+        return "Змін немає (старий і новий номер однакові)."
+    if book.is_phone_taken(new_number):
+        return "Цей номер уже використовується іншим контактом."
     record.edit_phone(old_number, new_number)
-    return "Phone changed"
+    return "Номер змінено."
+
 
 @input_error
 def show_phone(args, book: AddressBook):
@@ -70,60 +65,47 @@ def show_all_contacts(args, book: AddressBook):
     return contacts
 
 @input_error
-def add_email_cmd(args, book):
-    # usage: add-email <name> <email>
+def add_email_cmd(args, book: AddressBook):
     name, email = args
     record = book.find(name)
-
     if record is None:
-        from include.record import Record
         record = Record(name)
         book.add_record(record)
-
-    # емейл не повинен існувати в ІНШОГО контакту
-    if book.is_email_taken(email, exclude_name=name):
-        return "Email is already used by another contact."
-
+    if book.is_email_taken(email):
+        return "Цей email уже використовується іншим контактом."
     record.add_email(email)
-    return "Email added."
-
+    return "Email додано."
 
 @input_error
-def change_email_cmd(args, book):
-    # usage: change-email <name> <old_email> <new_email>
+def change_email_cmd(args, book: AddressBook):
     name, old_e, new_e = args
     record = book.find(name)
     if record is None:
         raise KeyError("Contact not found")
-
-    #  новий емейл не повинен існувати в ІНШОГО контакту
-    if book.is_email_taken(new_e, exclude_name=name):
-        return "Email is already used by another contact."
-
+    if old_e == new_e:
+        return "Змін немає (старий і новий email однакові)."
+    if book.is_email_taken(new_e):
+        return "Цей email уже використовується іншим контактом."
     record.edit_email(old_e, new_e)
-    return "Email updated."
-
+    return "Email оновлено."
 
 @input_error
-def delete_email_cmd(args, book):
-    # usage: delete-email <name> <email>
+def delete_email_cmd(args, book: AddressBook):
     name, e = args
     record = book.find(name)
     if record is None:
         raise KeyError("Contact not found")
-
     record.remove_email(e)
-    return "Email deleted."
-
+    return "Email видалено."
 
 @input_error
-def show_email_cmd(args, book):
-    (name,) = args
+def show_email_cmd(args, book: AddressBook):
+    name, = args
     record = book.find(name)
     if record is None:
         raise KeyError("Contact not found")
-    emails = "; ".join(e.value for e in record.emails) if record.emails else "-"
-    return f"{name}: {emails}"
+    return "; ".join(e.value for e in record.emails) if record.emails else "У контакту немає жодного email."
+
 
 @input_error
 def add_birthday(args, book: AddressBook):

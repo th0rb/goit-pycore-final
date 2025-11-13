@@ -6,18 +6,14 @@ from birthday import Birthday
 
 class AddressBook(UserDict):
 
-    def is_email_taken(self, email: str, exclude_name: str | None = None) -> bool:
-        for name, rec in self.data.items():
-            if exclude_name and name == exclude_name:
-                continue
+    def is_email_taken(self, email: str) -> bool:
+        for _, rec in self.data.items():
             if any(e.value == email for e in getattr(rec, "emails", [])):
                 return True
         return False
 
-    def is_phone_taken(self, phone: str, exclude_name: str | None = None) -> bool:
-        for name, rec in self.data.items():
-            if exclude_name and name == exclude_name:
-                continue
+    def is_phone_taken(self, phone: str) -> bool:
+        for _, rec in self.data.items():
             if any(p.value == phone for p in getattr(rec, "phones", [])):
                 return True
         return False
