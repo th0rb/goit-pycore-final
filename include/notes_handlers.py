@@ -6,7 +6,7 @@ from note import Note
 tag_regex = r"#\w+(?: \w+)*" # matches tags starting with '#' followed by word characters and spaces
 
 @input_error
-def add_note(args, notes: NotesBook):
+def add_note(notes: NotesBook, *args):
     # args: note text (may contain spaces) and optional tags starting with '#'
     if len(args) == 0:
         return "Invalid number of arguments. Usage: add-note [text] [#tag1 #tag2 ...]"
@@ -28,7 +28,7 @@ def add_note(args, notes: NotesBook):
         return str(e)
 
 @input_error
-def edit_note(args, notes: NotesBook):
+def edit_note(notes: NotesBook, *args):
     # Usage: edit-note [note_id] [new text ...] [#tag1 #tag2 ...]
     if len(args) < 2:
         return "Invalid number of arguments. Usage: edit-note [note_id] [new text] [#tag1 #tag2 ...]"
@@ -51,7 +51,7 @@ def edit_note(args, notes: NotesBook):
         return str(e)
 
 @input_error
-def delete_note(args, notes: NotesBook):
+def delete_note(notes: NotesBook, *args):
     # Usage: delete-note [note_id]
     if len(args) != 1:
         return "Invalid number of arguments. Usage: delete-note [note_id]"
@@ -74,7 +74,7 @@ def show_all_notes(notes: NotesBook):
     return str(e)
   
 @input_error
-def find_note_by_id(args, notes: NotesBook):
+def find_note_by_id(notes: NotesBook, *args):
     # Usage: note-by-id [note_id]
     if len(args) != 1:
         return "Invalid number of arguments. Usage: note-by-id [note_id]"
@@ -89,7 +89,7 @@ def find_note_by_id(args, notes: NotesBook):
         return str(e)
     
 @input_error
-def remove_tag_from_note(args, notes: NotesBook):
+def remove_tag_from_note(notes: NotesBook, *args):
     # Usage: remove-tag [note_id] [tag]
     if len(args) < 2:
         return "Invalid number of arguments. Usage: remove-tag [note_id] [tag]"
@@ -107,7 +107,7 @@ def remove_tag_from_note(args, notes: NotesBook):
         return str(e)
     
 @input_error
-def edit_tag_in_note(args, notes: NotesBook):
+def edit_tag_in_note(notes: NotesBook, *args):
     #Usage: edit-tag [note_id] [old_tag] [new_tag]
     if len(args) < 3:
         return "Invalid number of arguments. Usage: edit-tag [note_id] [old_tag] [new_tag]"
