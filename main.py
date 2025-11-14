@@ -165,7 +165,6 @@ def main():
                     save_address_book(book) #Збереження Контактів.
                     #save_notes_book(notes_book) #Збереження Нотаток.
 
-                    print("Good bye!")
                     break
 
                 case "add":
@@ -202,12 +201,12 @@ def main():
         save_address_book(book)
         #save_notes_book(notes_book)
 
-        print("\nGood bye!")
     finally:
         # зберігаємо у будь-якому разі
         save_address_book(book)
         #save_notes_book(notes_book)
 
+    print("\nGood bye!")
 
 if __name__ == "__main__":
     main()
