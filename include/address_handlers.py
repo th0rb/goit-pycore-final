@@ -5,7 +5,7 @@ from record import Record
 not_found_message = "Contact does not exist, you can add it"
 
 @input_error
-def add_contact(args, book: AddressBook):
+def add_contact(book: AddressBook, *args):
     name, phone = args
     record = book.find(name)
     message = "Contact updated."
@@ -21,7 +21,7 @@ def add_contact(args, book: AddressBook):
 
 
 @input_error
-def change_contact(args, book: AddressBook):
+def change_contact(book: AddressBook, *args):
     if len(args) != 3:
         return 'Invalid number of arguments. Usage: change [name] [old_number] [new_number]'
     name, old_number, new_number = args
@@ -37,7 +37,7 @@ def change_contact(args, book: AddressBook):
 
 
 @input_error
-def show_phone(args, book: AddressBook):
+def show_phone(book: AddressBook, *args):
     if len(args) != 1:
         return "Invalid number of arguments. Usage: phone [name]"
     name = args[0]
@@ -47,14 +47,14 @@ def show_phone(args, book: AddressBook):
     return record
 
 @input_error
-def show_all_contacts(args, book: AddressBook):
+def show_all_contacts(book: AddressBook):
     if len(book) == 0:
         return "Address book is empty."
     contacts = "\n".join([str(record) for record in book.values()])
     return contacts
 
 @input_error
-def add_email_cmd(args, book: AddressBook):
+def add_email(book: AddressBook, *args):
     name, email = args
     record = book.find(name)
     if record is None:
@@ -66,7 +66,7 @@ def add_email_cmd(args, book: AddressBook):
     return "Email додано."
 
 @input_error
-def change_email_cmd(args, book: AddressBook):
+def change_email(book: AddressBook, *args):
     name, old_e, new_e = args
     record = book.find(name)
     if record is None:
@@ -79,7 +79,7 @@ def change_email_cmd(args, book: AddressBook):
     return "Email оновлено."
 
 @input_error
-def delete_email_cmd(args, book: AddressBook):
+def delete_email(book: AddressBook, *args):
     name, e = args
     record = book.find(name)
     if record is None:
@@ -88,7 +88,7 @@ def delete_email_cmd(args, book: AddressBook):
     return "Email видалено."
 
 @input_error
-def show_email_cmd(args, book: AddressBook):
+def show_email(book: AddressBook, *args):
     name, = args
     record = book.find(name)
     if record is None:
@@ -97,7 +97,7 @@ def show_email_cmd(args, book: AddressBook):
 
 
 @input_error
-def add_birthday(args, book: AddressBook):
+def add_birthday(book: AddressBook, *args):
     if len(args) != 2:
         return "Invalid number of arguments. Usage: add-birthday [name] [date]"
     name, date = args
@@ -109,7 +109,7 @@ def add_birthday(args, book: AddressBook):
         return not_found_message
     
 @input_error
-def show_birthday(args, book: AddressBook):
+def show_birthday(book: AddressBook, *args):
     if len(args) != 1:
         return "Invalid number of arguments. Usage: show-birthday [name]"
     name = args[0]

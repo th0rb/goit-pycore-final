@@ -19,10 +19,10 @@ from address_handlers import (
     change_contact,
     show_phone,
     show_all_contacts,
-    add_email_cmd,
-    change_email_cmd,
-    delete_email_cmd,
-    show_email_cmd,
+    add_email,
+    change_email,
+    delete_email,
+    show_email,
     add_birthday,
     show_birthday
 )
@@ -32,7 +32,45 @@ from storage import (
     load_notes_book,
     save_notes_book
 )
+
+from help_handlers import (
+    show_help,
+    exit_assistant,
+    wrong_command
+)
+
 from utils import parse_input
+
+
+NOTES_COMMANDS = {
+    'add-note'              : add_note, 
+    'edit-note'             : edit_note,
+    'delete-note'           : delete_note,
+    'show-all-notes'        : show_all_notes,
+    'find_note-by-id'       : find_note_by_id,
+    'remove-tag-from-note'  : remove_tag_from_note,
+    'edit-tag-in-notee'     : edit_tag_in_note
+}
+
+HELPER_COMMANDS = {
+    "hello"         : show_help,
+    "close"         : exit_assistant,
+    "exit"          : exit_assistant,
+    "wrong_command" : wrong_command
+}
+
+ADDR_BOOK_COMMANDS = {
+    'add-contact'   : add_contact,
+    'change-contact': change_contact,
+    'show-phone'    : show_phone,
+    'show-all'      : show_all_contacts,
+    'add-email'     : add_email,
+    'change-email'  : change_email,
+    'delete-email'  : delete_email,
+    'show-email'    : show_email,
+    'add-birthday'  : add_birthday,
+    'show-birthday' : show_birthday
+}
 
 
 def main():
@@ -47,62 +85,21 @@ def main():
             user_input = input("Enter a command: ")
             command, *args = parse_input(user_input)
 
-            match command:
-                case "hello":
-                    print("How can I help you?")
-                case "close" | "exit":
-                    # Зберігаємо книги контактів і нотаток
-                    save_address_book(book) #Збереження Контактів.
-                    save_notes_book(notes_book) #Збереження Нотаток.
+            if command in ADDR_BOOK_COMMANDS.keys():
+                print (ADDR_BOOK_COMMANDS[command](book, *args))
 
-                    break
+            elif command in NOTES_COMMANDS.keys():
+                print (NOTES_COMMANDS[command](notes_book, *args))
 
-                case "add":
-                    print(add_contact(args, book))
-                case "change":
-                    print(change_contact(args, book))
-                case "phone":
-                    print(show_phone(args, book))
-                case "all":
-                    print(show_all_contacts(args, book))
+            elif command in HELPER_COMMANDS.keys():
+                print (HELPER_COMMANDS[command](*args))
+            
+            else:
+                print ("Unknown command")
 
-                # Email
-                case "add-email":
-                    print(add_email_cmd(args, book))
-                case "change-email":
-                    print(change_email_cmd(args, book))
-                case "delete-email":
-                    print(delete_email_cmd(args, book))
-                case "show-email":
-                    print(show_email_cmd(args, book))
-
-                # Days & birthdays
-                case "add-birthday":
-                    print(add_birthday(args, book))
-                case "show-birthday":
-                    print(show_birthday(args, book))
-                case "birthdays":
-                    print(book.get_upcoming_birthdays())
-                case "add-note":
-                    print(add_note(args, notes_book))
-                case "edit-note":
-                    print(edit_note(args, notes_book))
-                case "delete-note":
-                    print(delete_note(args, notes_book))
-                case "all-notes":
-                    print(show_all_notes(notes_book))
-                case "note-by-id":
-                    print(find_note_by_id(args, notes_book))
-                case "remove-tag":
-                    print(remove_tag_from_note(args, notes_book))
-                case "edit-tag":
-                    print(edit_tag_in_note(args, notes_book))
-                case _:
-                    print("Invalid command.")
     except KeyboardInterrupt:
-        # Якщо користувач натиснув Ctrl+C — теж зберігаємо
-        save_address_book(book)
-        save_notes_book(notes_book)
+        # Якщо користувач натиснув Ctrl+C
+        print ("Bye!")
 
     finally:
         # зберігаємо у будь-якому разі
