@@ -10,6 +10,14 @@ sys.path.append(target_dir)
 from address_book import AddressBook
 from error import input_error
 from record import Record
+from notes_handlers import (
+    add_note, edit_note,
+    delete_note,
+    show_all_notes,
+    find_note_by_id,
+    remove_tag_from_note,
+    edit_tag_in_note
+)
 from storage import (
     load_address_book,
     save_address_book,
@@ -123,8 +131,7 @@ def add_birthday(args, book: AddressBook):
         return "Birthday added."
     else:
         return not_found_message
-
-
+    
 @input_error
 def show_birthday(args, book: AddressBook):
     if len(args) != 1:
@@ -148,7 +155,7 @@ def parse_input(user_input):
 def main():
     # Завантажуємо книги контактів і нотаток
     book = load_address_book() #Завантаження Контактів.
-    #notes_book = load_notes_book() #Завантаження Контактів.
+    notes_book = load_notes_book() #Завантаження Контактів.
 
     print("Welcome to the assistant bot!")
 
@@ -163,7 +170,7 @@ def main():
                 case "close" | "exit":
                     # Зберігаємо книги контактів і нотаток
                     save_address_book(book) #Збереження Контактів.
-                    #save_notes_book(notes_book) #Збереження Нотаток.
+                    save_notes_book(notes_book) #Збереження Нотаток.
 
                     break
 
@@ -193,18 +200,31 @@ def main():
                     print(show_birthday(args, book))
                 case "birthdays":
                     print(book.get_upcoming_birthdays())
-
+                case "add-note":
+                    print(add_note(args, notes_book))
+                case "edit-note":
+                    print(edit_note(args, notes_book))
+                case "delete-note":
+                    print(delete_note(args, notes_book))
+                case "all-notes":
+                    print(show_all_notes(notes_book))
+                case "note-by-id":
+                    print(find_note_by_id(args, notes_book))
+                case "remove-tag":
+                    print(remove_tag_from_note(args, notes_book))
+                case "edit-tag":
+                    print(edit_tag_in_note(args, notes_book))
                 case _:
                     print("Invalid command.")
     except KeyboardInterrupt:
         # Якщо користувач натиснув Ctrl+C — теж зберігаємо
         save_address_book(book)
-        #save_notes_book(notes_book)
+        save_notes_book(notes_book)
 
     finally:
         # зберігаємо у будь-якому разі
         save_address_book(book)
-        #save_notes_book(notes_book)
+        save_notes_book(notes_book)
 
     print("\nGood bye!")
 
