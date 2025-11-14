@@ -205,9 +205,9 @@ def main():
         print("\nGood bye!")
     finally:
         # зберігаємо у будь-якому разі
-        save_data(book, contacts_file)
+        save_address_book(book)
+        #save_notes_book(notes_book)
 
 
 if __name__ == "__main__":
     main()
-    
