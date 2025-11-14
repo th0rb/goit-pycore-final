@@ -10,8 +10,8 @@ sys.path.append(target_dir)
 from adress_book import AddressBook
 from error import input_error
 from record import Record
-from storage import load_data, save_data, DEFAULT_FILENANE
-import sys
+from storage import Mode, load_data, save_data, DEFAULT_FILENANE, NOTES_FILENAME
+from notes_handlers import add_note, edit_note, delete_note, show_all_notes, find_note_by_id, remove_tag_from_note, edit_tag_in_note
 
 not_found_message = "Contact does not exist, you can add it"
 
@@ -69,8 +69,7 @@ def add_birthday(args, book: AddressBook):
         return "Birthday added."
     else:
         return not_found_message
-
-
+    
 @input_error
 def show_birthday(args, book: AddressBook):
     if len(args) != 1:
@@ -98,6 +97,7 @@ def main():
     else:
         contacts_file = DEFAULT_FILENANE
     book = load_data(contacts_file)
+    notes = load_data(NOTES_FILENAME, mode=Mode.NOTES_BOOK.value)
 
     print("Welcome to the assistant bot!")
     try:
@@ -110,6 +110,7 @@ def main():
                     print("How can I help you?")
                 case "close" | "exit":
                     save_data(book, contacts_file)
+                    save_data(notes, NOTES_FILENAME)
                     print("Good bye!")
                     break
                 case "add":
@@ -126,10 +127,25 @@ def main():
                     print(show_birthday(args, book))
                 case "birthdays":
                     print(book.get_upcoming_birthdays())
+                case "add-note":
+                    print(add_note(args, notes))
+                case "edit-note":
+                    print(edit_note(args, notes))
+                case "delete-note":
+                    print(delete_note(args, notes))
+                case "all-notes":
+                    print(show_all_notes(notes))
+                case "note-by-id":
+                    print(find_note_by_id(args, notes))
+                case "remove-tag":
+                    print(remove_tag_from_note(args, notes))
+                case "edit-tag":
+                    print(edit_tag_in_note(args, notes))
                 case _:
                     print("Invalid command.")
     except KeyboardInterrupt:
         save_data(book, contacts_file)
+        save_data(notes, NOTES_FILENAME)
         print("\nGood bye!")
 
 
