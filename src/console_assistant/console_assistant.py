@@ -28,10 +28,10 @@ ADDR_BOOK_COMMANDS = {
     "change" : "change_contact",
     "phone" : "show_phone",
     "all" : "show_all_contacts",
-    "add-email" : "add_email_cmd",
-    "change-email" : "change_email_cmd",
-    "delete-email" : "delete_email_cmd",
-    "show-email" : "show_email_cmd",
+    "add-email" : "add_email",
+    "change-email" : "change_email",
+    "delete-email" : "delete_email",
+    "show-email" : "show_email",
     "add-birthday": "add_birthday",
     "show-birthday" : "show_upcoming_birthdays",
 }
@@ -98,7 +98,7 @@ def show_all_contacts(book: AddressBook):
     return contacts
 
 @input_error
-def add_email_cmd(book: AddressBook, *args):
+def add_email(book: AddressBook, *args):
     name, email = args
     record = book.find(name)
     if record is None:
@@ -110,7 +110,7 @@ def add_email_cmd(book: AddressBook, *args):
     return "Email додано."
 
 @input_error
-def change_email_cmd(book: AddressBook, *args):
+def change_email(book: AddressBook, *args):
     name, old_e, new_e = args
     record = book.find(name)
     if record is None:
@@ -123,7 +123,7 @@ def change_email_cmd(book: AddressBook, *args):
     return "Email оновлено."
 
 @input_error
-def delete_email_cmd(book: AddressBook, *args):
+def delete_email(book: AddressBook, *args):
     name, e = args
     record = book.find(name)
     if record is None:
@@ -189,7 +189,6 @@ def assistant():
 
             if command in ADDR_BOOK_COMMANDS.keys():
                 call_func = globals()[ADDR_BOOK_COMMANDS[command]]
-                print(*args)
                 print(call_func(book, *args))
             else:
                 print("Invalid command.")
