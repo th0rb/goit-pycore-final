@@ -27,8 +27,8 @@ from address_handlers import (
     show_birthday
 )
 from storage import (
-    #load_notes_book,
-    #save_notes_book,
+    load_notes_book,
+    save_notes_book,
     load_address_book,
     save_address_book
 )
@@ -233,6 +233,8 @@ def main():
                 case "birthdays":
                     print(book.get_upcoming_birthdays())
                 case "add-note":
+
+                #Notes
                     print(add_note(args, notes_book))
                 case "edit-note":
                     print(edit_note(args, notes_book))
@@ -246,6 +248,7 @@ def main():
                     print(remove_tag_from_note(args, notes_book))
                 case "edit-tag":
                     print(edit_tag_in_note(args, notes_book))
+                
                 case _:
                     print("Invalid command.")
     except KeyboardInterrupt:
