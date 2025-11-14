@@ -11,10 +11,10 @@ from address_book import AddressBook
 from error import input_error
 from record import Record
 from storage import (
+    #load_notes_book,
+    #save_notes_book,
     load_address_book,
-    save_address_book,
-    load_notes_book,
-    save_notes_book
+    save_address_book
 )
 
 
@@ -68,6 +68,25 @@ def show_all_contacts(args, book: AddressBook):
         return "Address book is empty."
     contacts = "\n".join([str(record) for record in book.values()])
     return contacts
+
+@input_error
+def search_names(args, book: AddressBook):
+    if not args:
+        return "Invalid number of arguments. Usage: search [text]"
+    
+    # Підтримуємо пошук за кількома словами: search John Doe
+    query = " ".join(args).lower()
+
+    matches = []
+    for record in book.values():
+        # record.name — це об’єкт поля, тому беремо .value
+        if query in record.name.value.lower():
+            matches.append(record.name.value)
+
+    if not matches:
+        return "No contacts found for this query."
+
+    return "\n".join(matches)
 
 @input_error
 def add_email_cmd(args, book: AddressBook):
@@ -175,6 +194,9 @@ def main():
                     print(show_phone(args, book))
                 case "all":
                     print(show_all_contacts(args, book))
+                
+                case "search":
+                    print(search_names(args, book))
 
                 # Email
                 case "add-email":

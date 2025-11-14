@@ -49,11 +49,11 @@ def save_address_book(book):
 
 # ---------- НОТАТКИ ----------
 
-def load_notes_book():
+#def load_notes_book():
     #Завантажити книгу нотаток або створити нову.
     #return load_data(NOTES_FILE, NotesBook)
 
 
-def save_notes_book(book):
+#def save_notes_book(book):
     #Зберегти книгу нотаток у файл.
-    save_data(book, NOTES_FILE)
+    #save_data(book, NOTES_FILE)
