@@ -37,30 +37,33 @@ class AddressBook(UserDict):
         del self.data[name]
 
     def get_upcoming_birthdays(self):
-        # Пошук записів, дні народження яких відбудуться протягом наступних days днів
+    
+    #Повертає список контактів, у яких день народження відбудеться
+    #протягом наступних BIRTHDAY_REMINDER днів.
+    
+
         today = datetime.today().date()
         upcoming_birthdays = []
+
         for name, record in self.data.items():
             if record.birthday:
-                birthday = record.birthday.value.replace(year=today.year).date()
 
-                timedelta_days = (birthday - today).days
+                birth_dt = record.birthday.value.date()
+                birthday = birth_dt.replace(year=today.year)
 
-                if 0 <= timedelta_days <= self.BIRTHDAY_REMINDER:
-                    #check for weekend
-                    if birthday.weekday() > 4:
-                        days_delta = 2 if birthday.weekday() == 5 else 1
-                        congratulation_date = birthday + timedelta(days=days_delta)
-                    else:
-                        congratulation_date = birthday
+                # Якщо в цьому році ДР вже минув — беремо наступний рік
+                if birthday < today:
+                    birthday = birthday.replace(year=today.year + 1)
 
+                delta = (birthday - today).days
+
+                if 0 <= delta <= self.BIRTHDAY_REMINDER:
                     upcoming_birthdays.append(
                         {
                             "name": name,
-                            "congratulation_date": congratulation_date.strftime(
-                                Birthday.DATE_FORMAT
-                            ),
+                            "birthday_date": birthday.strftime(Birthday.DATE_FORMAT),
                         }
                     )
 
         return upcoming_birthdays
+
