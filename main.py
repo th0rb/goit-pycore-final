@@ -7,10 +7,15 @@ target_dir =path[0] + os.sep + 'include' # Go up one level and then into 'utils'
 sys.path.append(target_dir) 
 
 
-from adress_book import AddressBook
+from address_book import AddressBook
 from error import input_error
 from record import Record
-from storage import load_data, save_data, DEFAULT_FILENAME
+from storage import (
+    load_address_book,
+    save_address_book,
+    load_notes_book,
+    save_notes_book
+)
 
 
 not_found_message = "Contact does not exist, you can add it"
@@ -141,9 +146,10 @@ def parse_input(user_input):
     return cmd, *args
 
 def main():
-    contacts_file = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_FILENAME
+    # Завантажуємо книги контактів і нотаток
+    book = load_address_book() #Завантаження Контактів.
+    #notes_book = load_notes_book() #Завантаження Контактів.
 
-    book = load_data(contacts_file)
     print("Welcome to the assistant bot!")
 
     try:
@@ -155,7 +161,10 @@ def main():
                 case "hello":
                     print("How can I help you?")
                 case "close" | "exit":
-                    print("Good bye!")
+                    # Зберігаємо книги контактів і нотаток
+                    save_address_book(book) #Збереження Контактів.
+                    #save_notes_book(notes_book) #Збереження Нотаток.
+
                     break
 
                 case "add":
@@ -188,11 +197,16 @@ def main():
                 case _:
                     print("Invalid command.")
     except KeyboardInterrupt:
-        print("\nGood bye!")
+        # Якщо користувач натиснув Ctrl+C — теж зберігаємо
+        save_address_book(book)
+        #save_notes_book(notes_book)
+
     finally:
         # зберігаємо у будь-якому разі
-        save_data(book, contacts_file)
+        save_address_book(book)
+        #save_notes_book(notes_book)
 
+    print("\nGood bye!")
 
 if __name__ == "__main__":
     main()
