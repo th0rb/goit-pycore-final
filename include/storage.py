@@ -2,7 +2,7 @@ from pathlib import Path
 import pickle
 
 from address_book import AddressBook
-#from notes import NotesBook
+from notes_book import NotesBook
 
 #DEFAULT_FILENANE = "contacts.pkl"
 
@@ -51,7 +51,7 @@ def save_address_book(book):
 
 #def load_notes_book():
     #Завантажити книгу нотаток або створити нову.
-    #return load_data(NOTES_FILE, NotesBook)
+    return load_data(NOTES_FILE, NotesBook)
 
 
 #def save_notes_book(book):
