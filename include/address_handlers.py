@@ -61,21 +61,37 @@ def search(book: AddressBook, *args):
     # Підтримуємо пошук за кількома словами: search John Doe
     query = " ".join(args).lower()
 
+    # Визначаємо, чи запит схожий на email
+    is_email_query = False
+    if " " not in query and "@" in query:
+        local_part, _, domain_part = query.partition("@")
+        if local_part and "." in domain_part:
+            is_email_query = True
+
     matches = []
     for record in book.values():
-        # record.name — це об’єкт поля, тому беремо .value
+        # ----- ПОШУК ПО ІМЕНІ (завжди) -----
         if query in record.name.value.lower():
             matches.append(record.name.value)
-            continue  # щоб не дублювати, якщо ще й телефон співпаде
-    
-        for phone in record.phones:
-            if query in phone.value:
-                matches.append(record.name.value)
-                break  # знайшли по телефону — йдемо до наступного контакту
+            continue
+
+        if is_email_query:
+            # ----- ЗАПИТ СХОЖИЙ НА EMAIL → ШУКАЄМО ПО EMAIL -----
+            for email in record.emails:
+                if query in email.value.lower():
+                    matches.append(record.name.value)
+                    break
+        else:
+            # ----- ЗВИЧАЙНИЙ ЗАПИТ → ШУКАЄМО ПО ТЕЛЕФОНУ -----
+            for phone in record.phones:
+                if query in phone.value:
+                    matches.append(record.name.value)
+                    break
 
     if not matches:
         return "No contacts found for this query."
 
+    # Формуємо нормальний вивід
     result = []
     for record in book.values():
         if record.name.value in matches:
