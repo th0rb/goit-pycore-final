@@ -1,5 +1,15 @@
 import sys
 import os
+from colorama import init, Fore, Back, Style
+init(autoreset=True)
+
+# Кольори
+INFO = Fore.CYAN
+SUCCESS = Fore.GREEN
+WARNING = Fore.YELLOW
+ERROR = Fore.RED
+TITLE = Fore.MAGENTA + Style.BRIGHT
+RESET = Style.RESET_ALL
 
 path = os.path.split(os.path.abspath(__file__)) # Get current script's directory
 target_dir =path[0] + os.sep + 'include' # Go up one level and then into 'utils'
@@ -74,39 +84,39 @@ ADDR_BOOK_COMMANDS = {
 
 
 def main():
-    # Завантажуємо книги контактів і нотаток
-    book = load_address_book() #Завантаження Контактів.
-    notes_book = load_notes_book() #Завантаження Контактів.
+    book = load_address_book()
+    notes_book = load_notes_book()
 
-    print("Welcome to the assistant bot!")
+    print(TITLE + "\n🤖 Welcome to your colorful assistant bot! 🎨\n")
 
     try:
         while True:
-            user_input = input("Enter a command: ")
+            user_input = input(Fore.WHITE + "Enter a command: ")
             command, *args = parse_input(user_input)
 
-            if command in ADDR_BOOK_COMMANDS.keys():
-                print (ADDR_BOOK_COMMANDS[command](book, *args))
+            if command in ADDR_BOOK_COMMANDS:
+                result = ADDR_BOOK_COMMANDS[command](book, *args)
+                print(SUCCESS + str(result))
 
-            elif command in NOTES_COMMANDS.keys():
-                print (NOTES_COMMANDS[command](notes_book, *args))
+            elif command in NOTES_COMMANDS:
+                result = NOTES_COMMANDS[command](notes_book, *args)
+                print(INFO + str(result))
 
-            elif command in HELPER_COMMANDS.keys():
-                print (HELPER_COMMANDS[command](*args))
-            
+            elif command in HELPER_COMMANDS:
+                print(HELPER_COMMANDS[command](*args))
+
             else:
-                print ("Unknown command")
+                print(ERROR + "❌ Unknown command. Type 'hello' for help.")
 
     except KeyboardInterrupt:
-        # Якщо користувач натиснув Ctrl+C
-        print ("Bye!")
+        print(WARNING + "\nBye!")
 
     finally:
-        # зберігаємо у будь-якому разі
         save_address_book(book)
         save_notes_book(notes_book)
 
-    print("\nGood bye!")
+    print(TITLE + "\nGood bye!\n")
+
 
 if __name__ == "__main__":
     main()
