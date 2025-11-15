@@ -21,7 +21,7 @@ def add_contact(book: AddressBook, *args):
 
 
 @input_error
-def change_contact(book: AddressBook, *args):
+def change_phone(book: AddressBook, *args):
     if len(args) != 3:
         return 'Invalid number of arguments. Usage: change [name] [old_number] [new_number]'
     name, old_number, new_number = args
