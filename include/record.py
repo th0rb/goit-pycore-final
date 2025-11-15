@@ -55,7 +55,7 @@ class Record:
             raise KeyError("Номер не знайдено в цьому контакті.")
         self.phones.remove(phone)
 
-    def find_phone(self, phone_number: str) -> str | None:
+    def find_phone(self, phone_number: str) -> Phone | None:
         for phone in self.phones:
             if phone.value == phone_number:
                 return phone
