@@ -54,7 +54,7 @@ def show_all_contacts(book: AddressBook):
     return contacts
 
 @input_error
-def search_names(book: AddressBook, *args):
+def search(book: AddressBook, *args):
     if not args:
         return "Invalid number of arguments. Usage: search [text]"
     
@@ -66,11 +66,22 @@ def search_names(book: AddressBook, *args):
         # record.name — це об’єкт поля, тому беремо .value
         if query in record.name.value.lower():
             matches.append(record.name.value)
+            continue  # щоб не дублювати, якщо ще й телефон співпаде
+    
+        for phone in record.phones:
+            if query in phone.value:
+                matches.append(record.name.value)
+                break  # знайшли по телефону — йдемо до наступного контакту
 
     if not matches:
         return "No contacts found for this query."
 
-    return "\n".join(matches)
+    result = []
+    for record in book.values():
+        if record.name.value in matches:
+            result.append(str(record))
+
+    return "\n".join(result)
 
 @input_error
 def add_email(book: AddressBook, *args):
