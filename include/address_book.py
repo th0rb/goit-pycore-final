@@ -6,6 +6,8 @@ from birthday import Birthday
 
 class AddressBook(UserDict):
 
+    BIRTHDAY_REMINDER = 7
+
     def is_email_taken(self, email: str) -> bool:
         for _, rec in self.data.items():
             if any(e.value == email for e in getattr(rec, "emails", [])):
@@ -17,10 +19,6 @@ class AddressBook(UserDict):
             if any(p.value == phone for p in getattr(rec, "phones", [])):
                 return True
         return False
-
-
-
-    BIRTHDAY_REMINDER = 7
 
     def add_record(self, record: Record):
         if record.name.value in self.data:
@@ -65,4 +63,3 @@ class AddressBook(UserDict):
                     )
 
         return upcoming_birthdays
-
