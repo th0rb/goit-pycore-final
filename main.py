@@ -85,8 +85,8 @@ ADDR_BOOK_COMMANDS = {
 
 def main():
     # Завантажуємо книги контактів і нотаток
-    book = load_address_book() #Завантаження Контактів.
-    notes_book = load_notes_book() #Завантаження Контактів.
+    book = load_address_book()
+    notes_book = load_notes_book()
 
     print("Welcome to the assistant bot!")
 
@@ -109,7 +109,7 @@ def main():
 
     except KeyboardInterrupt:
         # Якщо користувач натиснув Ctrl+C
-        print ("Bye!")
+        print ("Interrupted!")
 
     finally:
         # зберігаємо у будь-якому разі
