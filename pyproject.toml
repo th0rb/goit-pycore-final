@@ -1,7 +1,7 @@
 [project]
 name = "goit-pycore-final"
 version = "0.1.0"
-description = "Add your description here"
+description = "Final project for Python Programming course - console assistant bot"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = []
