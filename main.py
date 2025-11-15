@@ -90,6 +90,38 @@ def main():
 
     print("Welcome to the assistant bot!")
 
+      # ======= кольоровий вивід + подвійна рамка + emoji 🎉 =======
+
+    # ANSI кольори
+    YELLOW = "\033[33m"
+    GREEN = "\033[32m"
+    CYAN = "\033[36m"
+    RESET = "\033[0m"
+
+    upcoming = book.get_upcoming_birthdays()
+
+    if upcoming:
+        print(f"\n{YELLOW}🎉 Upcoming birthdays within the next 7 days 🎉{RESET}\n")
+
+        # Подвійні лінії для таблиці
+        top_line    = "╔" + "══════════════════════" + "╦" + "══════════════════════" + "╗"
+        header_line = "║ {:<20} ║ {:<20} ║".format("Name", "Congratulation date")
+        mid_line    = "╠" + "══════════════════════" + "╬" + "══════════════════════" + "╣"
+        bottom_line = "╚" + "══════════════════════" + "╩" + "══════════════════════" + "╝"
+
+        # Друк таблиці
+        print(CYAN + top_line + RESET)
+        print(CYAN + header_line + RESET)
+        print(CYAN + mid_line + RESET)
+
+        for item in upcoming:
+            name = item['name']
+            date = item['congratulation_date']
+            row = f"║ {GREEN}{name:<20}{RESET} ║ {GREEN}{date:<20}{RESET} ║"
+            print(row)
+
+        print(CYAN + bottom_line + RESET + "\n")
+
     try:
         while True:
             user_input = input("Enter a command: ")
