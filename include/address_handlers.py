@@ -54,7 +54,7 @@ def show_all_contacts(book: AddressBook):
     return contacts
 
 @input_error
-def search_names(args, book: AddressBook):
+def search_names(book: AddressBook, *args):
     if not args:
         return "Invalid number of arguments. Usage: search [text]"
     
@@ -73,7 +73,7 @@ def search_names(args, book: AddressBook):
     return "\n".join(matches)
 
 @input_error
-def add_email_cmd(args, book: AddressBook):
+def add_email(book: AddressBook, *args):
     name, email = args
     record = book.find(name)
     if record is None:

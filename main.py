@@ -20,10 +20,10 @@ from address_handlers import (
     show_phone,
     show_all_contacts,
     search_names,
-    add_email_cmd,
-    change_email_cmd,
-    delete_email_cmd,
-    show_email_cmd,
+    add_email,
+    change_email,
+    delete_email,
+    show_email,
     add_birthday,
     show_birthday
 )
