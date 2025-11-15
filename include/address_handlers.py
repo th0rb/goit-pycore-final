@@ -54,6 +54,25 @@ def show_all_contacts(args, book: AddressBook):
     return contacts
 
 @input_error
+def search_names(args, book: AddressBook):
+    if not args:
+        return "Invalid number of arguments. Usage: search [text]"
+    
+    # Підтримуємо пошук за кількома словами: search John Doe
+    query = " ".join(args).lower()
+
+    matches = []
+    for record in book.values():
+        # record.name — це об’єкт поля, тому беремо .value
+        if query in record.name.value.lower():
+            matches.append(record.name.value)
+
+    if not matches:
+        return "No contacts found for this query."
+
+    return "\n".join(matches)
+
+@input_error
 def add_email_cmd(args, book: AddressBook):
     name, email = args
     record = book.find(name)
