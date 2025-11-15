@@ -19,18 +19,19 @@ from address_handlers import (
     change_phone,
     show_phone,
     show_all_contacts,
-    add_email,
-    change_email,
-    delete_email,
-    show_email,
+    search_names,
+    add_email_cmd,
+    change_email_cmd,
+    delete_email_cmd,
+    show_email_cmd,
     add_birthday,
     show_birthday
 )
 from storage import (
-    load_address_book,
-    save_address_book,
     load_notes_book,
-    save_notes_book
+    save_notes_book,
+    load_address_book,
+    save_address_book
 )
 
 from help_handlers import (
@@ -41,6 +42,14 @@ from help_handlers import (
 
 from utils import parse_input
 
+not_found_message = "Contact does not exist, you can add it"
+
+#@input_error
+
+def parse_input(user_input):
+    cmd, *args = user_input.split()
+    cmd = cmd.strip().lower()
+    return cmd, *args
 
 NOTES_COMMANDS = {
     'add-note'              : add_note, 
@@ -64,6 +73,7 @@ ADDR_BOOK_COMMANDS = {
     'change-phone'  : change_phone,
     'show-phone'    : show_phone,
     'show-all'      : show_all_contacts,
+    'search'        : search_names,
     'add-email'     : add_email,
     'change-email'  : change_email,
     'delete-email'  : delete_email,
