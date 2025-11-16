@@ -57,11 +57,11 @@ NOTES_COMMANDS = {
     'edit-note'             : edit_note,
     'delete-note'           : delete_note,
     'show-all-notes'        : show_all_notes,
-    'find_note-by-id'       : find_note_by_id,
+    'find-note-by-id'       : find_note_by_id,
     'remove-tag-from-note'  : remove_tag_from_note,
-    'edit-tag-in-notee'     : edit_tag_in_note,
     'notes-by-tags'         : search_notes_by_tags,
     'sort-notes-by-tags'    : sort_notes_by_tags,
+    'edit-tag-in-note'     : edit_tag_in_note,
     'search-notes'          : search_notes_by_text
 }
 
