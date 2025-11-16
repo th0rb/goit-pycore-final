@@ -1,8 +1,27 @@
 from error import input_error
 from address_book import AddressBook
 from record import Record
+from string import ascii_uppercase
+from colorama import init, Fore, Style
+init(autoreset=True)
+
+TITLE = Fore.MAGENTA + Style.BRIGHT
+LABEL = Fore.CYAN
+VAL = Fore.GREEN + Style.BRIGHT
+WARNING = Fore.YELLOW
+ERROR = Fore.RED + Style.BRIGHT
+RESET = Style.RESET_ALL
+
+ALPHA_EMOJI = {
+    c: chr(0x1F150 + i)  # 🅐 🅑 🅒 ...
+    for i, c in enumerate(ascii_uppercase)
+}
 
 not_found_message = "Contact does not exist, you can add it"
+
+def pad_lines(lines, width):
+    """Додає пробіли справа, щоб всі рядки були однакової довжини."""
+    return [line + " " * (width - len(line)) for line in lines]
 
 @input_error
 def add_contact(book: AddressBook, *args):
@@ -39,19 +58,120 @@ def change_phone(book: AddressBook, *args):
 @input_error
 def show_phone(book: AddressBook, *args):
     if len(args) != 1:
-        return "Invalid number of arguments. Usage: phone [name]"
+        return ERROR + "Usage: show-phone [name]"
+
     name = args[0]
     record = book.find(name)
+
     if record is None:
-        return not_found_message
-    return record
+        return ERROR + not_found_message
+
+    phones = [f"📞 {p.value}" for p in record.phones] or ["No phones"]
+    width = max(len(x) for x in phones)
+
+    phones = pad_lines(phones, width)
+
+    top = f"{TITLE}╔════════════════════╦═{'═'*width}╗"
+    header = f"{TITLE}║ Name               ║ Phones{' '*(width-6)}║"
+    mid = f"{TITLE}╠════════════════════╬═{'═'*width}╣"
+    bottom = f"{TITLE}╚════════════════════╩═{'═'*width}╝"
+
+    rows = [
+        top,
+        header,
+        mid,
+        *[f"║ {VAL}{name:<18}{RESET} ║ {VAL}{line}{RESET} ║" for line in phones],
+        bottom
+    ]
+
+    return "\n".join(rows)
+
+
 
 @input_error
 def show_all_contacts(book: AddressBook):
     if len(book) == 0:
-        return "Address book is empty."
-    contacts = "\n".join([str(record) for record in book.values()])
-    return contacts
+        return WARNING + "Address book is empty."
+
+    contacts = list(book.values())
+
+    # Сортуємо по алфавіту
+    contacts.sort(key=lambda r: r.name.value.lower())
+
+    # Групуємо
+    groups = {}
+    for rec in contacts:
+        first = rec.name.value[0].upper()
+        if not first.isalpha():
+            first = "#"
+        groups.setdefault(first, []).append(rec)
+
+    output = []
+
+    # Перебір груп у алфавітному порядку
+    for letter in sorted(groups.keys()):
+        group = groups[letter]
+
+        emoji = ALPHA_EMOJI.get(letter, "🔤")
+
+        output.append(f"\n{TITLE}{emoji}  {letter}{RESET}")
+
+        # Готуємо таблицю групи
+        table_data = []
+        for rec in group:
+            phones = [f"📞 {p.value}" for p in rec.phones] or ["-"]
+            emails = [f"✉️ {e.value}" for e in rec.emails] or ["-"]
+            birthday = f"📅 {rec.birthday.value.strftime('%d.%m.%Y')}" if rec.birthday else "-"
+
+            max_h = max(len(phones), len(emails))
+            phones += [""] * (max_h - len(phones))
+            emails += [""] * (max_h - len(emails))
+
+            table_data.append({
+                "name": rec.name.value,
+                "phones": phones,
+                "emails": emails,
+                "birthday": birthday
+            })
+
+        # Ширини
+        w_name  = max(len(t["name"])  for t in table_data)
+        w_phone = max(len(x) for t in table_data for x in t["phones"])
+        w_email = max(len(x) for t in table_data for x in t["emails"])
+        w_birth = max(len(t["birthday"]) for t in table_data)
+
+        top     = f"{TITLE}╔═{'═'*w_name}═╦═{'═'*w_phone}═╦═{'═'*w_email}═╦═{'═'*w_birth}═╗"
+        header  = f"║ Name{' '*(w_name-4)} ║ Phones{' '*(w_phone-6)} ║ Emails{' '*(w_email-6)} ║ Birthday{' '*(w_birth-8)} ║"
+        sep     = f"╠═{'═'*w_name}═╬═{'═'*w_phone}═╬═{'═'*w_email}═╬═{'═'*w_birth}═╣"
+        mid_sep = f"╠═{'─'*w_name}═╬═{'─'*w_phone}═╬═{'─'*w_email}═╬═{'─'*w_birth}═╣"
+        bottom  = f"╚═{'═'*w_name}═╩═{'═'*w_phone}═╩═{'═'*w_email}═╩═{'═'*w_birth}═╝"
+
+        output.append(top)
+        output.append(header)
+        output.append(sep)
+
+        for entry in table_data:
+            name = entry["name"]
+            phones = entry["phones"]
+            emails = entry["emails"]
+            birthday = entry["birthday"]
+
+            for i in range(len(phones)):
+                output.append(
+                    "║ "
+                    + (VAL + f"{name:<{w_name}}" + RESET if i == 0 else " " * w_name)
+                    + f" ║ {VAL}{phones[i]:<{w_phone}}{RESET}"
+                    + f" ║ {VAL}{emails[i]:<{w_email}}{RESET}"
+                    + f" ║ {(VAL + birthday + RESET) if i == 0 else ' '*w_birth} ║"
+                )
+            output.append(mid_sep)
+
+        # Замінюємо останній роздільник на низ таблиці
+        output[-1] = bottom
+
+    return "\n".join(output)
+
+
 
 @input_error
 def search(book: AddressBook, *args):
@@ -139,9 +259,28 @@ def delete_email(book: AddressBook, *args):
 def show_email(book: AddressBook, *args):
     name, = args
     record = book.find(name)
+
     if record is None:
-        raise KeyError("Contact not found")
-    return "; ".join(e.value for e in record.emails) if record.emails else "У контакту немає жодного email."
+        return ERROR + "Contact not found"
+
+    emails = [f"✉️ {e.value}" for e in record.emails] or ["No emails"]
+    width = max(len(x) for x in emails)
+    emails = pad_lines(emails, width)
+
+    top = f"{TITLE}╔════════════════════╦═{'═'*width}╗"
+    header = f"{TITLE}║ Name               ║ Emails{' '*(width-6)}║"
+    mid = f"{TITLE}╠════════════════════╬═{'═'*width}╣"
+    bottom = f"{TITLE}╚════════════════════╩═{'═'*width}╝"
+
+    rows = [
+        top,
+        header,
+        mid,
+        *[f"║ {VAL}{name:<18}{RESET} ║ {VAL}{line}{RESET} ║" for line in emails],
+        bottom
+    ]
+
+    return "\n".join(rows)
 
 
 @input_error

@@ -16,16 +16,18 @@ INFO = Fore.CYAN
 def show_help():
     print(TITLE + "\n📘 AVAILABLE COMMANDS\n")
 
-    top =    f"{Fore.MAGENTA}╔════════════════════════════╦══════════════════════════════════════════════╗"
-    header = f"{Fore.MAGENTA}║ {'Command':<26} ║ {'Description':<44} ║"
-    mid =    f"{Fore.MAGENTA}╠════════════════════════════╬══════════════════════════════════════════════╣"
-    bottom = f"{Fore.MAGENTA}╚════════════════════════════╩══════════════════════════════════════════════╝"
+    # -----------------------------------------------------
+    # 1️⃣ Assistant Commands
+    # -----------------------------------------------------
+    assistant = [
+        ("hello / help", "Show this help"),
+        ("exit / close", "Exit assistant"),
+    ]
 
-    print(top)
-    print(header)
-    print(mid)
-
-    commands = [
+    # -----------------------------------------------------
+    # 2️⃣ Address Book Commands
+    # -----------------------------------------------------
+    address_book = [
         ("add-contact", "Add a new contact"),
         ("change-phone", "Change/Replace phone for a contact"),
         ("show-phone", "Show contact's phone number"),
@@ -36,6 +38,12 @@ def show_help():
         ("show-email", "Show all emails for contact"),
         ("add-birthday", "Add birthday date"),
         ("show-birthday", "Show contact birthday"),
+    ]
+
+    # -----------------------------------------------------
+    # 3️⃣ Notes Commands
+    # -----------------------------------------------------
+    notes = [
         ("add-note", "Create a new note"),
         ("edit-note", "Edit existing note"),
         ("delete-note", "Remove note"),
@@ -43,15 +51,35 @@ def show_help():
         ("find-note-by-id", "Search note by ID"),
         ("remove-tag-from-note", "Delete tag from note"),
         ("edit-tag-in-note", "Edit tag of note"),
-        ("hello / help", "Show this help"),
-        ("exit / close", "Exit assistant"),
     ]
 
-    for cmd, description in commands:
-        print(f"║ {CMD}{cmd:<26}{RESET} ║ {DESC}{description:<44}{RESET} ║")
+    # -----------------------------------------------------
+    # Функція для малювання таблиці
+    # -----------------------------------------------------
+    def draw_table(title, emoji, commands):
+        print(TITLE + f"\n{emoji} {title}\n")
 
-    print(bottom)
+        top =    f"{Fore.MAGENTA}╔════════════════════════════╦══════════════════════════════════════════════╗"
+        header = f"{Fore.MAGENTA}║ {'Command':<26} ║ {'Description':<44} ║"
+        mid =    f"{Fore.MAGENTA}╠════════════════════════════╬══════════════════════════════════════════════╣"
+        bottom = f"{Fore.MAGENTA}╚════════════════════════════╩══════════════════════════════════════════════╝"
+
+        print(top)
+        print(header)
+        print(mid)
+
+        for cmd, desc in commands:
+            print(f"║ {CMD}{cmd:<26}{RESET} ║ {DESC}{desc:<44}{RESET} ║")
+
+        print(bottom)
+
+    # 🔥 Малюємо три секції:
+    draw_table("Assistant Commands", "🤖", assistant)
+    draw_table("Address Book Commands", "📒", address_book)
+    draw_table("Notes Commands", "📝", notes)
+
     return ""
+
 
 def wrong_command():
     print(ERROR + "❌ Unknown command! Type 'hello' for help.")
