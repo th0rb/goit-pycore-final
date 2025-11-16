@@ -7,13 +7,15 @@ class Email(Field):
         r"^(?=.{6,254}$)"                                      # Довжина email
         r"[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+"                    # local-part
         r"@"
-        r"(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+"# домени
+        r"(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+"  # домени
         r"[A-Za-z]{2,}$"                                       # TLD
     )
 
     def __init__(self, value: str):
+        # нормалізація: до нижнього регістру
         normalized = value.strip().lower()
 
+        # валідація
         if not self.EMAIL_REGEX.match(normalized):
             raise ValueError("Невірний формат email.")
 
