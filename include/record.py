@@ -68,4 +68,17 @@ class Record:
             raise ValueError("Birthday already exists for this record.")
 
     def __str__(self):
-        return f"Contact name: {self.name.value}, phones: {'; '.join(p.value for p in self.phones)}"
+        # Ім'я
+        contact_str = f"Contact: | {self.name.value}"
+
+        # Телефони
+        if self.phones:
+            phones_str = ", ".join(p.value for p in self.phones)
+            contact_str += f" | {phones_str}"
+
+        # Email-и
+        if hasattr(self, "emails") and self.emails:
+            emails_str = ", ".join(e.value for e in self.emails)
+            contact_str += f" | {emails_str} |"
+
+        return contact_str
