@@ -99,44 +99,6 @@ delete-contact [name]
 Пошук:
 search [query]
 
-КОМАНДИ КОНТАКТІВ
-
-Додати контакт:
-add-contact [name] [phone] [email?]
-
-Змінити телефон:
-change-phone [name] [old_phone] [new_phone]
-
-Показати телефони:
-show-phone [name]
-
-Додати email:
-add-email [name] [email]
-
-Змінити email:
-change-email [name] [old_email] [new_email]
-
-Видалити email:
-delete-email [name] [email]
-
-Додати або змінити день народження:
-add-birthday [name] [DD.MM.YYYY]
-
-Показати дату народження:
-show-birthday [name]
-
-Показати наближені дні народження:
-birthdays
-
-Показати всі контакти:
-show-all
-
-Видалити контакт:
-delete-contact [name]
-
-Пошук:
-search [query]
-
 КОМАНДИ НОТАТОК
 
 Додати нотатку:
