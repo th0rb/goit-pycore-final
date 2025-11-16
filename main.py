@@ -117,7 +117,7 @@ def main():
         save_address_book(book)
         save_notes_book(notes_book)
 
-    print("\nGood bye!")
+    exit_assistant()
 
 if __name__ == "__main__":
     main()
