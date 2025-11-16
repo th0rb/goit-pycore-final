@@ -126,67 +126,71 @@ def show_all_contacts(book: AddressBook):
         emoji = ALPHA_EMOJI.get(letter, "🔤")
 
         output.append(f"\n{TITLE}{emoji}  {letter}{RESET}")
-
-        # Готуємо таблицю групи
-        table_data = []
-        for rec in group:
-            phones = [f"📞 {p.value}" for p in rec.phones] or [""]
-            emails = [f"✉️ {e.value}" for e in rec.emails] or [""]
-            birthday = f"📅 {rec.birthday.value.strftime('%d.%m.%Y')}" if rec.birthday else ""
-
-            max_h = max(len(phones), len(emails))
-            phones += [""] * (max_h - len(phones))
-            emails += [""] * (max_h - len(emails))
-
-            table_data.append({
-                "name": rec.get_print_name(),
-                "phones": phones,
-                "emails": emails,
-                "birthday": birthday
-            })
-
-        # Ширини
-        w_name  = max(len(t["name"])  for t in table_data) + 2
-        w_phone = max(len(x) for t in table_data for x in t["phones"]) + 2
-        if w_phone < 8: w_phone = 8 #min width
-        w_email = max(len(x) for t in table_data for x in t["emails"]) + 2
-        if w_email < 8: w_email = 8 #min width
-        w_birth = max(len(t["birthday"]) for t in table_data) + 2
-        if w_birth < 10: w_birth = 10 #min width
-
-        top     = f"{TITLE}╔═{'═'*w_name}═╦═{'═'*w_phone}═╦═{'═'*w_email}═╦═{'═'*w_birth}═╗"
-        header  = f"║ Name{' '*(w_name-4)} ║ Phones{' '*(w_phone-6)} ║ Emails{' '*(w_email-6)} ║ Birthday{' '*(w_birth-8)} ║"
-        sep     = f"╠═{'═'*w_name}═╬═{'═'*w_phone}═╬═{'═'*w_email}═╬═{'═'*w_birth}═╣"
-        mid_sep = f"╠═{'═'*w_name}═╬═{'═'*w_phone}═╬═{'═'*w_email}═╬═{'═'*w_birth}═╣"
-        bottom  = f"╚═{'═'*w_name}═╩═{'═'*w_phone}═╩═{'═'*w_email}═╩═{'═'*w_birth}═╝"
-
-        output.append(top)
-        output.append(header)
-        output.append(sep)
-
-        for entry in table_data:
-            name = entry["name"]
-            phones = entry["phones"]
-            emails = entry["emails"]
-            birthday = entry["birthday"]
-            if not birthday : birthday = " " * (w_birth + 1)
-
-            for i in range(max(len(phones), len(emails))):
-                output.append(
-                    RESET + "║ " 
-                    + (VAL + f"{name:<{w_name}} " + RESET if i == 0 else " " * (w_name + 1))
-                    + f"║ {VAL}{phones[i]:<{w_phone}}{RESET}"
-                    + "║ " 
-                    + (VAL + f"{emails[i]:<{w_email+1}} " + RESET if emails[i] else " " * (w_email + 1))
-                    + "║ " 
-                    + (VAL + f"{birthday:<{w_birth}}" + RESET if i == 0 else " " * (w_birth + 1)) + "║"
-                )
-            output.append(mid_sep)
-
-        # Замінюємо останній роздільник на низ таблиці
-        output[-1] = bottom
-
+        output = draw_table(output, group)
     return "\n".join(output)
+
+
+def draw_table(output, group):
+    # Готуємо таблицю групи
+    table_data = []
+    for rec in group:
+        phones = [f"📞 {p.value}" for p in rec.phones] or [""]
+        emails = [f"✉️ {e.value}" for e in rec.emails] or [""]
+        birthday = f"📅 {rec.birthday.value.strftime('%d.%m.%Y')}" if rec.birthday else ""
+
+        max_h = max(len(phones), len(emails))
+        phones += [""] * (max_h - len(phones))
+        emails += [""] * (max_h - len(emails))
+
+        table_data.append({
+            "name": rec.get_print_name(),
+            "phones": phones,
+            "emails": emails,
+            "birthday": birthday
+        })
+
+    # Ширини
+    w_name  = max(len(t["name"])  for t in table_data) + 2
+    w_phone = max(len(x) for t in table_data for x in t["phones"]) + 2
+    if w_phone < 8: w_phone = 8 #min width
+    w_email = max(len(x) for t in table_data for x in t["emails"]) + 2
+    if w_email < 8: w_email = 8 #min width
+    w_birth = max(len(t["birthday"]) for t in table_data) + 2
+    if w_birth < 10: w_birth = 10 #min width
+
+    top     = f"{TITLE}╔═{'═'*w_name}═╦═{'═'*w_phone}═╦═{'═'*w_email}═╦═{'═'*w_birth}═╗"
+    header  = f"║ Name{' '*(w_name-4)} ║ Phones{' '*(w_phone-6)} ║ Emails{' '*(w_email-6)} ║ Birthday{' '*(w_birth-8)} ║"
+    sep     = f"╠═{'═'*w_name}═╬═{'═'*w_phone}═╬═{'═'*w_email}═╬═{'═'*w_birth}═╣"
+    mid_sep = f"╠═{'═'*w_name}═╬═{'═'*w_phone}═╬═{'═'*w_email}═╬═{'═'*w_birth}═╣"
+    bottom  = f"╚═{'═'*w_name}═╩═{'═'*w_phone}═╩═{'═'*w_email}═╩═{'═'*w_birth}═╝"
+
+    output.append(top)
+    output.append(header)
+    output.append(sep)
+
+    for entry in table_data:
+        name = entry["name"]
+        phones = entry["phones"]
+        emails = entry["emails"]
+        birthday = entry["birthday"]
+        if not birthday : birthday = " " * (w_birth + 1)
+
+        for i in range(max(len(phones), len(emails))):
+            output.append(
+                RESET + "║ " 
+                + (VAL + f"{name:<{w_name}} " + RESET if i == 0 else " " * (w_name + 1))
+                + f"║ {VAL}{phones[i]:<{w_phone}}{RESET}"
+                + "║ " 
+                + (VAL + f"{emails[i]:<{w_email+1}} " + RESET if emails[i] else " " * (w_email + 1))
+                + "║ " 
+                + (VAL + f"{birthday:<{w_birth}}" + RESET if i == 0 else " " * (w_birth + 1)) + "║"
+            )
+        output.append(mid_sep)
+    # Замінюємо останній роздільник на низ таблиці
+    output[-1] = bottom
+            
+    return output
+
 
 @input_error
 def search(book: AddressBook, *args):
