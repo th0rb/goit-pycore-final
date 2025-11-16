@@ -1,5 +1,7 @@
 import sys
 import os
+from colorama import init, Fore, Back, Style
+init(autoreset=True)
 
 path = os.path.split(os.path.abspath(__file__)) # Get current script's directory
 target_dir =path[0] + os.sep + 'include' # Go up one level and then into 'utils'
@@ -14,7 +16,8 @@ from notes_handlers import (
     remove_tag_from_note,
     edit_tag_in_note,
     search_notes_by_tags,
-    sort_notes_by_tags
+    sort_notes_by_tags,
+    search_notes_by_text
 )
 from address_handlers import (
     add_contact,
@@ -39,19 +42,15 @@ from storage import (
 from help_handlers import (
     show_help,
     exit_assistant,
-    wrong_command
+    wrong_command,
+    welcome_message
 )
+
+from birthday_handlers import show_upcoming_birthdays
 
 from utils import parse_input
 
 not_found_message = "Contact does not exist, you can add it"
-
-#@input_error
-
-def parse_input(user_input):
-    cmd, *args = user_input.split()
-    cmd = cmd.strip().lower()
-    return cmd, *args
 
 NOTES_COMMANDS = {
     'add-note'              : add_note, 
@@ -62,14 +61,15 @@ NOTES_COMMANDS = {
     'remove-tag-from-note'  : remove_tag_from_note,
     'edit-tag-in-notee'     : edit_tag_in_note,
     'notes-by-tags'         : search_notes_by_tags,
-    'sort-notes-by-tags'    : sort_notes_by_tags
+    'sort-notes-by-tags'    : sort_notes_by_tags,
+    'search-notes'          : search_notes_by_text
 }
 
 HELPER_COMMANDS = {
     "hello"         : show_help,
+    "help"          : show_help,
     "close"         : exit_assistant,
     "exit"          : exit_assistant,
-    "wrong_command" : wrong_command
 }
 
 ADDR_BOOK_COMMANDS = {
@@ -92,7 +92,8 @@ def main():
     book = load_address_book()
     notes_book = load_notes_book()
 
-    print("Welcome to the assistant bot!")
+    welcome_message()
+    show_upcoming_birthdays(book)
 
     try:
         while True:
@@ -109,18 +110,18 @@ def main():
                 print (HELPER_COMMANDS[command](*args))
             
             else:
-                print ("Unknown command")
+                wrong_command()
 
     except KeyboardInterrupt:
         # Якщо користувач натиснув Ctrl+C
-        print ("Interrupted!")
+        exit_assistant()
 
     finally:
         # зберігаємо у будь-якому разі
         save_address_book(book)
         save_notes_book(notes_book)
 
-    print("\nGood bye!")
+    exit_assistant()
 
 if __name__ == "__main__":
     main()

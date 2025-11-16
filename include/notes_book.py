@@ -1,3 +1,4 @@
+import re
 from collections import UserDict
 from note import Note
 
@@ -45,3 +46,13 @@ class NotesBook(UserDict):
   
   def sort_notes_by_tags(self) -> list[Note]:
       return sorted(self.data.values(), key=lambda note: " ".join(sorted(t.value for t in note.note_tags)))
+ 
+  def search_notes_by_text(self, text: str) -> list[Note]:
+    tokens = text.lower().split()
+
+    result = []
+    for note in self.data.values():
+      note_text = note.note_text.value.lower()
+      if all(re.search(re.escape(token), note_text) for token in tokens):
+        result.append(note)
+    return result
