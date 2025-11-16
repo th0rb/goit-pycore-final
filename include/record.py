@@ -66,6 +66,28 @@ class Record:
             self.birthday = Birthday(birthday)
         else:
             raise ValueError("Birthday already exists for this record.")
+        
+    #limit print name length to 20 chars for list tables
+    def get_print_name(self) -> str:
+        if len(self.name.value) > 20 :
+            print_name = self.name.value[0:19] + '...'
+        else:
+            print_name = f"{self.name.value:<20}"
+
+        return print_name
 
     def __str__(self):
-        return f"Contact name: {self.name.value}, phones: {'; '.join(p.value for p in self.phones)}"
+        # Ім'я 
+        contact_str = f"Contact: | {self.name.value:<20}"
+
+        # Телефони
+        if self.phones:
+            phones_str = ", ".join(p.value for p in self.phones)
+            contact_str += f" | {phones_str}"
+
+        # Email-и
+        if hasattr(self, "emails") and self.emails:
+            emails_str = ", ".join(e.value for e in self.emails)
+            contact_str += f" | {emails_str} |"
+
+        return contact_str
