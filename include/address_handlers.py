@@ -285,19 +285,21 @@ def show_email(book: AddressBook, *args):
         return ERROR + "Contact not found"
 
     emails = [f"✉️ {e.value}" for e in record.emails] or ["No emails"]
+    name = record.get_print_name()
+    n_width = len(name)
     width = max(len(x) for x in emails)
     emails = pad_lines(emails, width)
 
-    top = f"{TITLE}╔════════════════════╦═{'═'*width}╗"
-    header = f"{TITLE}║ Name               ║ Emails{' '*(width-6)}║"
-    mid = f"{TITLE}╠════════════════════╬═{'═'*width}╣"
-    bottom = f"{TITLE}╚════════════════════╩═{'═'*width}╝"
+    top = f"{TITLE}╔═{'═'*n_width}═╦═{'═'*width}╗"
+    header = f"{TITLE}║ Name{' '*(width-4)} ║ Emails{' '*(width-6)}║"
+    mid = f"{TITLE}╠═{'═'*n_width}═╬═{'═'*width}╣"
+    bottom = f"{TITLE}╚═{'═'*n_width}═╩═{'═'*width}╝"
 
     rows = [
         top,
         header,
         mid,
-        *[f"║ {VAL}{name:<18}{RESET} ║ {VAL}{line}{RESET} ║" for line in emails],
+        *[f"║ {VAL}{name}{RESET} ║ {VAL}{line}{RESET} ║" for line in emails],
         bottom
     ]
 
