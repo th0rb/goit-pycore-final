@@ -179,7 +179,9 @@ def draw_table(output, group):
             output.append(
                 RESET + "║ " 
                 + (VAL + f"{name:<{w_name}} " + RESET if i == 0 else " " * (w_name + 1))
-                + f"║ {VAL}{phones[i]:<{w_phone}}{RESET}"
+                #+ f"║ {VAL}{phones[i]:<{w_phone}}{RESET}"
+                + RESET + "║ "
+                + (VAL + f"{phones[i]:<{w_phone}}" + RESET if phones[i] else " " * (w_phone + 1))
                 + "║ " 
                 + (VAL + f"{emails[i]:<{w_email+1}} " + RESET if emails[i] else " " * (w_email + 1))
                 + "║ " 
