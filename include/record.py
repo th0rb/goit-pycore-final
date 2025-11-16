@@ -68,8 +68,8 @@ class Record:
             raise ValueError("Birthday already exists for this record.")
 
     def __str__(self):
-        # Ім'я
-        contact_str = f"Contact: | {self.name.value}"
+        # Ім'я 
+        contact_str = f"Contact: | {self.name.value:<20}"
 
         # Телефони
         if self.phones:
