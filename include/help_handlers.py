@@ -10,6 +10,7 @@ DESC = Fore.CYAN
 RESET = Style.RESET_ALL
 ERROR = Fore.RED + Style.BRIGHT
 GOODBYE = Fore.GREEN + Style.BRIGHT
+INFO = Fore.CYAN
 
 
 def show_help():
@@ -42,7 +43,7 @@ def show_help():
         ("find_note-by-id", "Search note by ID"),
         ("remove-tag-from-note", "Delete tag from note"),
         ("edit-tag-in-note", "Edit tag of note"),
-        ("hello", "Show this help"),
+        ("hello / help", "Show this help"),
         ("exit / close", "Exit assistant"),
     ]
 
@@ -52,12 +53,14 @@ def show_help():
     print(bottom)
     return ""
 
-
 def wrong_command():
-    return ERROR + "❌ Unknown command! Type 'hello' for help."
+    print(ERROR + "❌ Unknown command! Type 'hello' for help.")
 
 
 def exit_assistant():
     print(GOODBYE + "\n👋 See you soon!\n")
     sys.exit()
 
+def welcome_message():
+    print(TITLE + "\n🤖 Welcome to your colorful assistant bot! 🎨\n")
+    print(INFO + "\n🤖 If you need help, write Hello! \n")

@@ -3,15 +3,6 @@ import os
 from colorama import init, Fore, Back, Style
 init(autoreset=True)
 
-# Кольори
-INFO = Fore.CYAN
-SUCCESS = Fore.GREEN
-WARNING = Fore.YELLOW
-ERROR = Fore.RED
-TITLE = Fore.MAGENTA + Style.BRIGHT
-RESET = Style.RESET_ALL
-
-
 path = os.path.split(os.path.abspath(__file__)) # Get current script's directory
 target_dir =path[0] + os.sep + 'include' # Go up one level and then into 'utils'
 # Add the directory to sys.path
@@ -49,7 +40,8 @@ from storage import (
 from help_handlers import (
     show_help,
     exit_assistant,
-    wrong_command
+    wrong_command,
+    welcome_message
 )
 
 from birthday_handlers import show_upcoming_birthdays
@@ -71,9 +63,9 @@ NOTES_COMMANDS = {
 
 HELPER_COMMANDS = {
     "hello"         : show_help,
+    "help"          : show_help,
     "close"         : exit_assistant,
     "exit"          : exit_assistant,
-    "wrong_command" : wrong_command
 }
 
 ADDR_BOOK_COMMANDS = {
@@ -96,9 +88,7 @@ def main():
     book = load_address_book()
     notes_book = load_notes_book()
 
-    print(TITLE + "\n🤖 Welcome to your colorful assistant bot! 🎨\n")
-    print(INFO + "\n🤖 If you need help, write Hello! \n")
-
+    welcome_message()
     show_upcoming_birthdays(book)
 
     try:
@@ -116,11 +106,11 @@ def main():
                 print (HELPER_COMMANDS[command](*args))
             
             else:
-                print ("Unknown command")
+                wrong_command()
 
     except KeyboardInterrupt:
         # Якщо користувач натиснув Ctrl+C
-        print ("Interrupted!")
+        exit_assistant()
 
     finally:
         # зберігаємо у будь-якому разі
