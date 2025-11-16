@@ -22,7 +22,7 @@ def add_note(notes: NotesBook, *args):
             for tag in tags:
                 if tag:
                     new_note.add_tag(tag)
-            notes.add_note(new_note)
+        notes.add_note(new_note)
         return f"Note added. id: {new_note.id}"
     except Exception as e:
         return str(e)
