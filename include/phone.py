@@ -1,34 +1,42 @@
 import re
 from field import Field
 
-
 def normalize_phone(phone: str) -> str:
     """
     Нормалізує телефонний номер:
-    - залишає тільки цифри та '+';
-    - якщо номер починається з '+380' — ок;
-    - якщо номер починається з '380' — додаємо '+';
-    - якщо просто цифри — додаємо '+38';
-    - повертає номер у міжнародному форматі.
+    - дозволяє тільки цифри, '+', '-', '(', ')', пробіли;
+    - якщо є інші символи → помилка;
+    - формує номер у форматі +380XXXXXXXXX.
     """
-    cleaned = re.sub(r"[^\d+]", "", phone)
+    # Дозволені символи: цифри, +, -, пробіли, круглі дужки
+    if re.search(r"[^\d+\-\s()]", phone):
+        raise ValueError("Phone number contains invalid characters (letters or symbols).")
 
+    # Прибираємо пробіли, дужки, тире
+    cleaned = re.sub(r"[()\s\-]", "", phone)
+
+    # Тепер у cleaned можуть бути тільки цифри або +цифри
+    # Виправляємо різні варіанти форматів
     if cleaned.startswith("+380"):
-        return cleaned
-    if cleaned.startswith("380"):
-        return "+" + cleaned
-    if cleaned.startswith("+"):
-        return cleaned
+        number = cleaned
+    elif cleaned.startswith("380"):
+        number = "+" + cleaned
+    elif cleaned.startswith("0") and len(cleaned) == 10:
+        number = "+38" + cleaned
+    elif cleaned.startswith("+") and not cleaned.startswith("+380"):
+        raise ValueError("Only Ukrainian numbers in +380 format are allowed.")
+    else:
+        raise ValueError("Invalid phone number format. Phone number must be in format +380XXXXXXXXX.")
 
-    return "+38" + cleaned
+    # Фінальна перевірка
+    if not (number.startswith("+380") and len(number) == 13 and number[1:].isdigit()):
+        raise ValueError("Phone number must be in format +380XXXXXXXXX.")
+
+    return number
+
 
 
 class Phone(Field):
     def __init__(self, value: str):
         normalized = normalize_phone(value)
-
-        # Дозволяємо тільки формат +380XXXXXXXXX  
-        if not (normalized.startswith("+380") and len(normalized) == 13 and normalized[1:].isdigit()):
-            raise ValueError("Phone number must be in format +380XXXXXXXXX.")
-
         super().__init__(normalized)
