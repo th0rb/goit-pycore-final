@@ -1,24 +1,36 @@
 # goit-pycore-final
-Assistant Bot (CLI)
-Консольний асистент для роботи з контактами та нотатками. Підтримує телефони, email-и, дні народження, пошук за критеріями, нотатки з тегами. Усі дані зберігаються на диску в папці користувача та автоматично відновлюються при запуску. При виході через Ctrl+C стан також зберігається.
 
-Можливості
-Адресна книга: контакти, кілька телефонів та email-адрес у одному записі.
-Глобальна унікальність: один і той самий телефон або email не можуть належати двом різним контактам.
-Без дублів у межах контакту: повторні однакові телефон/email для одного запису блокуються з читабельними повідомленнями.
+Personal Assistant
+Консольний застосунок для управління контактами та нотатками. Підтримує збереження даних, пошук, редагування, сортування та нагадування про дні народження.
 
-Дні народження:
-Додавання/перегляд дня народження контакту.
-Виведення списку контактів, у яких ДН через N днів від сьогодні (без перенесення вихідних на понеділок/вівторок).
+МОЖЛИВОСТІ
 
-Нотатки з тегами:
-Додавання, редагування, видалення нотаток.
-Додавання тегів до нотаток та фільтрація за тегами.
+Контакти:
+- Додавання контактів
+- Редагування телефонів та email
+- Додавання та зміна дати народження
+- Пошук за імʼям, email або телефоном
+- Показ усіх контактів
+- Видалення контактів
+- Перевірка унікальності email / телефону
+- Нагадування про дні народження
+
+Нотатки:
+- Додавання нотаток (з автоматичним коротким UUID)
+- Пошук за текстом
+- Пошук за тегами
+- Редагування нотаток
+- Видалення нотаток
+- Сортування за тегами
+- Додавання, редагування та видалення тегів
 
 Збереження даних:
-Всі дані зберігаються у папці користувача: ~/.assistant_data/
-( через pickle)
-Стан зберігається навіть при Ctrl+C.
+- Зберігаються у папці:
+  ~/.assistant_data/contacts.bin
+  ~/.assistant_data/notes.bin
+
+Формат — pickle. При відсутності файлів — створюються порожні.
+При будь-якому виході (exit, close, Ctrl+C) виконується збереження стану.
 
 Валідація:
 Телефон — 10 цифр.
@@ -37,76 +49,138 @@ Python 3.10+ (використовується match/case).
 
 Для кольорів: пакет colorama.
 
-Встановлення та запуск
-Локальний запуск (із коду)
-git clone <url-вашого-репозиторію>
-cd goit-pycore-final
-python -m venv .venv
-# Windows:
-.venv\Scripts\activate
-# macOS/Linux:
-source .venv/bin/activate
-pip install -r requirements.txt  # якщо є
-python main.py                   # або: python main.py <шлях_до_файлу_контактів>
+ВСТАНОВЛЕННЯ
 
+1. Встановити залежності:
+pip install -r requirements.txt
 
-За замовчуванням контакти/нотатки зберігаються у ~/.assistant_data/.
-Якщо передати шлях аргументом — збереження/завантаження відбуватиметься у цьому файлі.
+2. Запуск програми:
+python main.py
 
 Встановлення як пакет (опційно)
 pip install -e .
 assistant-bot   # якщо вказано console_scripts в проєкті
 
-Команди (довідник)
-Контакти
-Команда	Опис	Приклад
-hello	Привітання	hello
-add [ім'я] [телефон]	Створити контакт або додати телефон до існуючого	add John 1234567890
-change [ім'я] [старий телефон] [новий телефон]	Змінити телефон	change John 1234567890 0991112233
-phone [ім'я]	Показати телефони контакту	phone John
-all	Показати всі контакти	all
-add-email [ім'я] [email]	Додати email у контакт	add-email John john@example.com
-change-email [ім'я] [старий email] [новий email]	Змінити email	change-email John john@example.com john2@example.com
-delete-email [ім'я] [email]	Видалити email	delete-email John john@example.com
-show-email [ім'я]	Показати всі email-и контакту	show-email John
-add-birthday [ім'я] [DD.MM.YYYY]	Додати ДН	add-birthday John 05.09.2000
-show-birthday [ім'я]	Показати ДН	show-birthday John
-birthdays [N]	Контакти, у кого ДН через N днів (без перенесення вихідних)	birthdays 7
-search [запит]	Пошук контакту за ім'ям/телефоном/email (частковий збіг)	search joh
+КОМАНДИ КОНТАКТІВ
 
-Примітки по валідації та унікальності:
-Телефон — 10 цифр; глобально унікальний серед усіх контактів.
-Email — глобально унікальний серед усіх контактів.
-У межах одного контакту дублікати телефонів/email-адрес заборонені (чіткі помилки).
+Додати контакт:
+add-contact [name] [phone] [email?]
 
-Службові
-Команда	Опис
-help або ?	Показати довідкову таблицю команд
-close / exit	Зберегти дані та вийти
-Ctrl+C	Акуратний вихід із збереженням стану
+Змінити телефон:
+change-phone [name] [old_phone] [new_phone]
 
-Приклади
-Enter a command: add John 1234567890
-Contact added.
+Показати телефони:
+show-phone [name]
 
-Enter a command: add-email John john@example.com
-Email added.
+Додати email:
+add-email [name] [email]
 
-Enter a command: phone John
-John: 1234567890
+Змінити email:
+change-email [name] [old_email] [new_email]
 
-Enter a command: show-email John
-john@example.com
+Видалити email:
+delete-email [name] [email]
 
-Enter a command: add-birthday John 05.09.2000
-Birthday added.
+Додати або змінити день народження:
+add-birthday [name] [DD.MM.YYYY]
 
-Enter a command: exit
-Good bye!
+Показати дату народження:
+show-birthday [name]
 
-Збереження даних
-Формат — pickle. При відсутності файлів — створюються порожні.
-При будь-якому виході (exit, close, Ctrl+C) виконується збереження стану.
+Показати наближені дні народження:
+birthdays
+
+Показати всі контакти:
+show-all
+
+Видалити контакт:
+delete-contact [name]
+
+Пошук:
+search [query]
+
+КОМАНДИ КОНТАКТІВ
+
+Додати контакт:
+add-contact [name] [phone] [email?]
+
+Змінити телефон:
+change-phone [name] [old_phone] [new_phone]
+
+Показати телефони:
+show-phone [name]
+
+Додати email:
+add-email [name] [email]
+
+Змінити email:
+change-email [name] [old_email] [new_email]
+
+Видалити email:
+delete-email [name] [email]
+
+Додати або змінити день народження:
+add-birthday [name] [DD.MM.YYYY]
+
+Показати дату народження:
+show-birthday [name]
+
+Показати наближені дні народження:
+birthdays
+
+Показати всі контакти:
+show-all
+
+Видалити контакт:
+delete-contact [name]
+
+Пошук:
+search [query]
+
+КОМАНДИ НОТАТОК
+
+Додати нотатку:
+add-note [text] [#tag1 #tag2 ...]
+
+Редагувати нотатку:
+edit-note [note_id] [new_text]
+
+Видалити нотатку:
+delete-note [note_id]
+
+Знайти нотатку за ID:
+find-note-by-id [note_id]
+
+Показати всі нотатки:
+show-all-notes
+
+Пошук за текстом:
+search-notes-by-text [text]
+
+Пошук за тегами:
+search-notes-by-tags [#tag1 #tag2]
+
+Додати тег:
+add-tag-to-note [note_id] [#tag]
+
+Видалити тег:
+remove-tag-from-note [note_id] [#tag]
+
+Редагувати тег:
+edit-tag-in-note [note_id] [old_tag] [new_tag]
+
+Сортування нотаток за тегами:
+sort-notes-by-tags
+
+СИСТЕМНІ КОМАНДИ
+
+Показати всі команди:
+help
+
+Вихід:
+exit
+close
+quit
 
 Кольоровий інтерфейс (Colorama)
 
@@ -137,10 +211,34 @@ main.py             # CLI, парсер команд, match/case, збереже
 git remote add upstream https://github.com/<owner>/goit-pycore-final.git
 git fetch upstream
 
-
 Працювати у гілці від develop (наприклад, feature/<name>).
 Коміти → пуш у свій форк → Pull Request в upstream/develop.
 Якщо upstream змінився — git fetch upstream && git merge upstream/develop у свою гілку.
 
 Примітки
 Валідація email/телефону — інтегрована; у разі помилок користувач отримує зрозуміле повідомлення.
+
+ПРИКЛАД РОБОТИ
+> add-contact John 0931234567 john@example.com
+Contact 'John' added.
+
+> add-email John john@example.com
+Email added.
+
+> phone John
+John: 1234567890
+
+> show-email John
+john@example.com
+
+> add-birthday John 12.04.1990
+Birthday added for John.
+
+> birthdays
+Upcoming birthdays:
+ • John — 12.04.1990
+
+> exit
+Good bye!
+
+Проєкт виконаний у рамках курсу Python.

@@ -21,7 +21,7 @@ class NotesBook(UserDict):
   def edit_note(self, note_id: str, new_text: str):
     note = self.find_note_by_id(note_id)
     if note is None:
-      raise KeyError(f"Note with text '{note_id}' not found.")
+      raise KeyError(f"Note with id '{note_id}' not found.")
     
     existing_note = self.find_note_by_text(new_text)
     if existing_note and existing_note.id != note_id:

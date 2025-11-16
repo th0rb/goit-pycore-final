@@ -11,30 +11,30 @@ def get_upcoming_birthdays(book : AddressBook):
     #Повертає список контактів, у яких день народження відбудеться
     #протягом наступних BIRTHDAY_REMINDER днів.
     
-        today = datetime.today().date()
-        upcoming_birthdays = []
+    today = datetime.today().date()
+    upcoming_birthdays = []
 
-        for name, record in book.data.items():
-            if record.birthday:
+    for name, record in book.data.items():
+        if record.birthday:
 
-                birth_dt = record.birthday.value.date()
-                birthday = birth_dt.replace(year=today.year)
+            birth_dt = record.birthday.value.date()
+            birthday = birth_dt.replace(year=today.year)
 
-                # Якщо в цьому році ДР вже минув — беремо наступний рік
-                if birthday < today:
-                    birthday = birthday.replace(year=today.year + 1)
+            # Якщо в цьому році ДР вже минув — беремо наступний рік
+            if birthday < today:
+                birthday = birthday.replace(year=today.year + 1)
 
-                delta = (birthday - today).days
+            delta = (birthday - today).days
 
-                if 0 <= delta <= BIRTHDAY_REMINDER:
-                    upcoming_birthdays.append(
-                        {
-                            "name": name,
-                            "birthday_date": birthday.strftime(Birthday.DATE_FORMAT),
-                        }
-                    )
+            if 0 <= delta <= BIRTHDAY_REMINDER:
+                upcoming_birthdays.append(
+                    {
+                        "name": name,
+                        "birthday_date": birthday.strftime(Birthday.DATE_FORMAT),
+                    }
+                )
 
-        return upcoming_birthdays
+    return upcoming_birthdays
 
 
 def show_upcoming_birthdays(book : AddressBook) -> None:

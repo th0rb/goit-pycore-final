@@ -95,7 +95,11 @@ def remove_tag_from_note(notes: NotesBook, *args):
         return "Invalid number of arguments. Usage: remove-tag [note_id] [tag]"
 
     note_id = args[0]
-    tag = re.findall(tag_regex, " ".join(args[1:]))[0] # extract the first tag from args
+    tags = re.findall(tag_regex, " ".join(args[1:])) # extract the first tag from args
+    if not tags:
+        return "Tag is missing or has invalid format. Usage: remove-tag [note_id] [#tag]"
+    tag = tags[0]
+
     
     try:
         note = notes.find_note_by_id(note_id)
