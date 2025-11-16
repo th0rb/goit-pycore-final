@@ -63,4 +63,4 @@ def exit_assistant():
 
 def welcome_message():
     print(TITLE + "\n🤖 Welcome to your colorful assistant bot! 🎨\n")
-    print(INFO + "\n🤖 If you need help, write Hello! \n")
+    print(INFO + "🤖 If you need help, write Hello! \n")

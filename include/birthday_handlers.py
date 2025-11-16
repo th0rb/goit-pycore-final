@@ -54,7 +54,6 @@ def show_upcoming_birthdays(book : AddressBook) -> None:
         names_max_width = max(len(col['name'])  for col in upcoming)
         if names_max_width < MINIMUM_COLUMN_WIDTH :
              names_max_width = MINIMUM_COLUMN_WIDTH
-        print(names_max_width)
 
         print(f"\n{YELLOW}🎉 Upcoming birthdays within the next 7 days 🎉{RESET}\n")
 
