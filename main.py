@@ -40,16 +40,11 @@ from help_handlers import (
     wrong_command
 )
 
+from birthday_handlers import show_upcoming_birthdays
+
 from utils import parse_input
 
 not_found_message = "Contact does not exist, you can add it"
-
-#@input_error
-
-def parse_input(user_input):
-    cmd, *args = user_input.split()
-    cmd = cmd.strip().lower()
-    return cmd, *args
 
 NOTES_COMMANDS = {
     'add-note'              : add_note, 
@@ -89,6 +84,8 @@ def main():
     notes_book = load_notes_book()
 
     print("Welcome to the assistant bot!")
+
+    show_upcoming_birthdays(book)
 
     try:
         while True:
