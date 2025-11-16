@@ -18,6 +18,7 @@ sys.path.append(target_dir)
 
 from notes_handlers import (
     add_note, edit_note,
+    
     delete_note,
     show_all_notes,
     find_note_by_id,
@@ -78,7 +79,6 @@ HELPER_COMMANDS = {
     "help"          : show_help,
     "close"         : exit_assistant,
     "exit"          : exit_assistant,
-    "wrong-command" : wrong_command
 }
 
 ADDR_BOOK_COMMANDS = {
@@ -168,7 +168,7 @@ def main():
                 user_input = input('Enter a command: ')
 
             if not user_input.strip():
-                print('Please enter a command')
+                wrong_command()
                 continue
 
             command, *args = parse_input(user_input)
@@ -183,19 +183,6 @@ def main():
             if command in HELPER_COMMANDS:
                 print(HELPER_COMMANDS[command](*args))
                 continue
-
-            # guess and run
-            suggestion, score = guess_command(user_input)
-            if suggestion and score >= 0.6:
-                suggested_cmd = f"{suggestion} {' '.join(args)}"
-                print(f"Можливо ви мали на увазі: {Fore.YELLOW}{suggested_cmd}{Style.RESET_ALL}")
-
-                confirm = input("Підтвердити виконаннякоманди? (y/n):").strip().lower()
-
-                if confirm in ('y', 'yes'):
-                    print(execute_suggestion(suggestion, user_input, args))
-                else:
-                    print("Дія скасована користувачем.")
             else:
                 wrong_command()
 
