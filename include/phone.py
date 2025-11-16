@@ -1,6 +1,7 @@
 import re
 from field import Field
 
+
 def normalize_phone(phone: str) -> str:
     """
     Нормалізує телефонний номер:
@@ -40,3 +41,4 @@ class Phone(Field):
     def __init__(self, value: str):
         normalized = normalize_phone(value)
         super().__init__(normalized)
+
