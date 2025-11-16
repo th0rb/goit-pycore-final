@@ -1,5 +1,7 @@
 import sys
 import os
+from colorama import init, Fore, Back, Style
+init(autoreset=True)
 
 path = os.path.split(os.path.abspath(__file__)) # Get current script's directory
 target_dir =path[0] + os.sep + 'include' # Go up one level and then into 'utils'
@@ -12,13 +14,17 @@ from notes_handlers import (
     show_all_notes,
     find_note_by_id,
     remove_tag_from_note,
-    edit_tag_in_note
+    edit_tag_in_note,
+    search_notes_by_text,
+    sort_notes_by_tags,
+    search_notes_by_tags
 )
 from address_handlers import (
     add_contact,
     change_phone,
     show_phone,
     show_all_contacts,
+    search_names,
     add_email,
     change_email,
     delete_email,
@@ -27,36 +33,43 @@ from address_handlers import (
     show_birthday
 )
 from storage import (
-    load_address_book,
-    save_address_book,
     load_notes_book,
-    save_notes_book
+    save_notes_book,
+    load_address_book,
+    save_address_book
 )
 
 from help_handlers import (
     show_help,
     exit_assistant,
-    wrong_command
+    wrong_command,
+    welcome_message
 )
+
+from birthday_handlers import show_upcoming_birthdays
 
 from utils import parse_input
 
+not_found_message = "Contact does not exist, you can add it"
 
 NOTES_COMMANDS = {
     'add-note'              : add_note, 
     'edit-note'             : edit_note,
     'delete-note'           : delete_note,
     'show-all-notes'        : show_all_notes,
-    'find_note-by-id'       : find_note_by_id,
+    'find-note-by-id'       : find_note_by_id,
     'remove-tag-from-note'  : remove_tag_from_note,
-    'edit-tag-in-notee'     : edit_tag_in_note
+    'edit-tag-in-note'      : edit_tag_in_note,
+    'search-notes'          : search_notes_by_text,
+    'notes-by-tags'         : search_notes_by_tags,
+    'sort-notes-by-tags'    : sort_notes_by_tags,
 }
 
 HELPER_COMMANDS = {
     "hello"         : show_help,
+    "help"          : show_help,
     "close"         : exit_assistant,
     "exit"          : exit_assistant,
-    "wrong_command" : wrong_command
 }
 
 ADDR_BOOK_COMMANDS = {
@@ -64,6 +77,7 @@ ADDR_BOOK_COMMANDS = {
     'change-phone'  : change_phone,
     'show-phone'    : show_phone,
     'show-all'      : show_all_contacts,
+    'search'        : search_names,
     'add-email'     : add_email,
     'change-email'  : change_email,
     'delete-email'  : delete_email,
@@ -75,10 +89,11 @@ ADDR_BOOK_COMMANDS = {
 
 def main():
     # Завантажуємо книги контактів і нотаток
-    book = load_address_book() #Завантаження Контактів.
-    notes_book = load_notes_book() #Завантаження Контактів.
+    book = load_address_book()
+    notes_book = load_notes_book()
 
-    print("Welcome to the assistant bot!")
+    welcome_message()
+    show_upcoming_birthdays(book)
 
     try:
         while True:
@@ -95,18 +110,18 @@ def main():
                 print (HELPER_COMMANDS[command](*args))
             
             else:
-                print ("Unknown command")
+                wrong_command()
 
     except KeyboardInterrupt:
         # Якщо користувач натиснув Ctrl+C
-        print ("Bye!")
+        exit_assistant()
 
     finally:
         # зберігаємо у будь-якому разі
         save_address_book(book)
         save_notes_book(notes_book)
 
-    print("\nGood bye!")
+    exit_assistant()
 
 if __name__ == "__main__":
     main()

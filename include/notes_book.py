@@ -1,3 +1,4 @@
+import re
 from collections import UserDict
 from note import Note
 
@@ -34,3 +35,24 @@ class NotesBook(UserDict):
       raise KeyError(f"Note with id '{note_id}' not found.")
     
     del self.data[note_id]
+
+  def search_notes_by_tags(self, tags: list[str]) -> list[Note]:
+      found_notes = []
+      for note in self.data.values():
+          note_tags_values = [tag.value for tag in note.note_tags]
+          if any(tag in note_tags_values for tag in tags):
+              found_notes.append(note)
+      return found_notes
+  
+  def sort_notes_by_tags(self) -> list[Note]:
+      return sorted(self.data.values(), key=lambda note: " ".join(sorted(t.value for t in note.note_tags)))
+ 
+  def search_notes_by_text(self, text: str) -> list[Note]:
+    tokens = text.lower().split()
+
+    result = []
+    for note in self.data.values():
+      note_text = note.note_text.value.lower()
+      if all(re.search(re.escape(token), note_text) for token in tokens):
+        result.append(note)
+    return result
