@@ -17,8 +17,8 @@ target_dir =path[0] + os.sep + 'include' # Go up one level and then into 'utils'
 sys.path.append(target_dir)
 
 from notes_handlers import (
-    add_note, edit_note,
-    
+    add_note,
+    edit_note,
     delete_note,
     show_all_notes,
     find_note_by_id,
