@@ -77,13 +77,15 @@ def search(book: AddressBook, *args):
 
         if is_email_query:
             # ----- ЗАПИТ СХОЖИЙ НА EMAIL → ШУКАЄМО ПО EMAIL -----
-            for email in record.emails:
+            emails = getattr(record, "emails", [])
+            for email in emails:
                 if query in email.value.lower():
                     matches.append(record.name.value)
                     break
         else:
-            # ----- ЗВИЧАЙНИЙ ЗАПИТ → ШУКАЄМО ПО ТЕЛЕФОНУ -----
-            for phone in record.phones:
+            # ----- НЕ EMAIL → ШУКАЄМО ПО ТЕЛЕФОНУ -----
+            phones = getattr(record, "phones", [])
+            for phone in phones:
                 if query in phone.value:
                     matches.append(record.name.value)
                     break
