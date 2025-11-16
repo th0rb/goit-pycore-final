@@ -27,11 +27,11 @@ def show_help():
 
     commands = [
         ("add-contact", "Add a new contact"),
-        ("change-contact", "Change phone/email for a contact"),
+        ("change-phone", "Change/Replace phone for a contact"),
         ("show-phone", "Show contact's phone number"),
         ("show-all", "Show all saved contacts"),
         ("add-email", "Attach email to contact"),
-        ("change-email", "Replace contact email"),
+        ("change-email", "Change/Replace contact email"),
         ("delete-email", "Remove email from contact"),
         ("show-email", "Show all emails for contact"),
         ("add-birthday", "Add birthday date"),
@@ -40,7 +40,7 @@ def show_help():
         ("edit-note", "Edit existing note"),
         ("delete-note", "Remove note"),
         ("show-all-notes", "List all notes"),
-        ("find_note-by-id", "Search note by ID"),
+        ("find-note-by-id", "Search note by ID"),
         ("remove-tag-from-note", "Delete tag from note"),
         ("edit-tag-in-note", "Edit tag of note"),
         ("hello / help", "Show this help"),
