@@ -188,11 +188,6 @@ def show_all_contacts(book: AddressBook):
 
     return "\n".join(output)
 
-
-def draw_table(data) -> str:
-    pass
-
-
 @input_error
 def search(book: AddressBook, *args):
     if not args:

@@ -68,9 +68,9 @@ NOTES_COMMANDS = {
     'delete-note'           : delete_note,
     'show-all-notes'        : show_all_notes,
     'find-note-by-id'       : find_note_by_id,
-    'remove-tag-from-note'  : remove_tag_from_note,
-    'edit-tag-in-note'      : edit_tag_in_note,
-    'search-notes-by-text'  : search_notes_by_text,
+    'note-remove-tag'       : remove_tag_from_note,
+    'note-edit-tag'         : edit_tag_in_note,
+    'search-notes'          : search_notes_by_text,
     'search-notes-by-tags'  : search_notes_by_tags,
     'sort-notes-by-tags'    : sort_notes_by_tags,
 }
