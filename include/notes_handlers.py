@@ -133,6 +133,34 @@ def edit_tag_in_note(notes: NotesBook, *args):
         return f"Tag '{old_tag}' updated to '{new_tag}' in note {note_id}."
     except Exception as e:
         return str(e)
+
+@input_error   
+def search_notes_by_tags(notes: NotesBook, *args):
+    # Usage: search-notes-by-tags [#tag1 #tag2 ...]
+    if len(args) == 0:
+        return "Invalid number of arguments. Usage: search-notes-by-tags [#tag1 #tag2 ...]"
+
+    tags = re.findall(tag_regex, " ".join(args))
+
+    try:
+        notes_found = notes.search_notes_by_tags(tags)
+        if not notes_found:
+            return "No notes found with the specified tags."
+        return "\n".join([str(note) for note in notes_found])
+
+    except Exception as e:
+        return str(e)
+    
+@input_error   
+def sort_notes_by_tags(notes: NotesBook):
+    try:
+        sorted_notes = notes.sort_notes_by_tags()
+        if not sorted_notes:
+            return "No notes available to sort."
+        return "\n".join([str(note) for note in sorted_notes])
+    except Exception as e:
+        return str(e)
+
     
 
 # “smart search”, знаходить нотатки навіть тоді, коли:
