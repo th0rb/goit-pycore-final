@@ -19,7 +19,7 @@ from address_handlers import (
     change_phone,
     show_phone,
     show_all_contacts,
-    search_names,
+    search,
     add_email,
     change_email,
     delete_email,
@@ -73,7 +73,7 @@ ADDR_BOOK_COMMANDS = {
     'change-phone'  : change_phone,
     'show-phone'    : show_phone,
     'show-all'      : show_all_contacts,
-    'search'        : search_names,
+    'search'        : search,
     'add-email'     : add_email,
     'change-email'  : change_email,
     'delete-email'  : delete_email,
@@ -115,8 +115,7 @@ def main():
         # зберігаємо у будь-якому разі
         save_address_book(book)
         save_notes_book(notes_book)
-
-    print("\nGood bye!")
+        print("\nGood bye!")
 
 if __name__ == "__main__":
     main()
