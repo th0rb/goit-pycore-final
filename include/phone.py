@@ -3,12 +3,7 @@ from field import Field
 
 
 def normalize_phone(phone: str) -> str:
-    """
-    Нормалізує телефонний номер:
-    - дозволяє тільки цифри, '+', '-', '(', ')', пробіли;
-    - якщо є інші символи → помилка;
-    - формує номер у форматі +380XXXXXXXXX.
-    """
+   
     # Дозволені символи: цифри, +, -, пробіли, круглі дужки
     if re.search(r"[^\d+\-\s()]", phone):
         raise ValueError("Phone number contains invalid characters (letters or symbols).")
