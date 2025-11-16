@@ -12,7 +12,8 @@ from notes_handlers import (
     show_all_notes,
     find_note_by_id,
     remove_tag_from_note,
-    edit_tag_in_note
+    edit_tag_in_note,
+    search_notes_by_text
 )
 from address_handlers import (
     add_contact,
@@ -53,7 +54,8 @@ NOTES_COMMANDS = {
     'show-all-notes'        : show_all_notes,
     'find_note-by-id'       : find_note_by_id,
     'remove-tag-from-note'  : remove_tag_from_note,
-    'edit-tag-in-notee'     : edit_tag_in_note
+    'edit-tag-in-notee'     : edit_tag_in_note,
+    'search-notes'          : search_notes_by_text
 }
 
 HELPER_COMMANDS = {
