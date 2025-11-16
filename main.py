@@ -16,7 +16,7 @@ from notes_handlers import (
 )
 from address_handlers import (
     add_contact,
-    change_contact,
+    change_phone,
     show_phone,
     show_all_contacts,
     add_email,
@@ -61,7 +61,7 @@ HELPER_COMMANDS = {
 
 ADDR_BOOK_COMMANDS = {
     'add-contact'   : add_contact,
-    'change-contact': change_contact,
+    'change-phone'  : change_phone,
     'show-phone'    : show_phone,
     'show-all'      : show_all_contacts,
     'add-email'     : add_email,
