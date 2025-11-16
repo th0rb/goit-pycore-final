@@ -38,6 +38,15 @@ def add_contact(book: AddressBook, *args):
         record.add_phone(phone)
     return message
 
+@input_error
+def delete_contact(book: AddressBook, *args):
+    # Usage: delete-contact [name]
+    if len(args) != 1:
+        raise ValueError("Invalid number of arguments. Usage: delete-contact [name]")
+
+    name = args[0]
+    book.delete(name)
+    return f"Contact '{name}' deleted."
 
 @input_error
 def change_phone(book: AddressBook, *args):
