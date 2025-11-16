@@ -8,9 +8,11 @@ class Birthday(Field):
 
     def __init__(self, value):
         try:
-            self.value = datetime.strptime(value, Birthday.DATE_FORMAT)
+            dt = datetime.strptime(value, Birthday.DATE_FORMAT)
         except ValueError:
             raise ValueError("Invalid date format. Use DD.MM.YYYY")
+        super().__init__(dt)
 
     def __str__(self):
-        return f'{self.value.strftime(Birthday.DATE_FORMAT)}'    
+        return f'{self.value.strftime(Birthday.DATE_FORMAT)}'
+    
