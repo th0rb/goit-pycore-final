@@ -133,3 +133,27 @@ def edit_tag_in_note(notes: NotesBook, *args):
         return f"Tag '{old_tag}' updated to '{new_tag}' in note {note_id}."
     except Exception as e:
         return str(e)
+    
+
+# “smart search”, знаходить нотатки навіть тоді, коли:
+# слова введені у будь-якому порядку
+# слова можуть бути частково введені
+# регістр не має значення
+# можна вводити кілька слів
+# можна вводити частини слів
+# знаходить збіги в будь-якій частині тексту
+
+def search_notes_by_text(notes: NotesBook, *args):
+    # Usage: search-notes [search_text]
+    if len(args) == 0:
+        return "Invalid number of arguments. Usage: search-notes [search_text]"
+    
+    search_text = " ".join(args)
+
+    try:
+        found_notes = notes.search_notes_by_text(search_text)
+        if not found_notes:
+            return f"No notes found containing '{search_text}'."
+        return "\n".join([str(note) for note in found_notes])
+    except Exception as e:
+        return str(e)
