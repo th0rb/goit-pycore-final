@@ -1,5 +1,16 @@
 import sys
 import os
+from colorama import init, Fore, Back, Style
+init(autoreset=True)
+
+# Кольори
+INFO = Fore.CYAN
+SUCCESS = Fore.GREEN
+WARNING = Fore.YELLOW
+ERROR = Fore.RED
+TITLE = Fore.MAGENTA + Style.BRIGHT
+RESET = Style.RESET_ALL
+
 
 path = os.path.split(os.path.abspath(__file__)) # Get current script's directory
 target_dir =path[0] + os.sep + 'include' # Go up one level and then into 'utils'
@@ -78,7 +89,8 @@ def main():
     book = load_address_book() #Завантаження Контактів.
     notes_book = load_notes_book() #Завантаження Контактів.
 
-    print("Welcome to the assistant bot!")
+    print(TITLE + "\n🤖 Welcome to your colorful assistant bot! 🎨\n")
+    print(INFO + "\n🤖 If you need help, write Hello! \n")
 
     try:
         while True:
