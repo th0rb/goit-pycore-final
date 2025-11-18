@@ -65,6 +65,26 @@ def change_phone(book: AddressBook, *args):
     record.edit_phone(old_number, new_number)
     return "Номер змінено."
 
+#draw small tabe with Contact name and one data row
+def draw_small_table(name, data_name, data):
+    n_width = len(name)
+    d_width = max(len(x) for x in data)
+
+    top = f"{TITLE}╔═{'═'*n_width}═╦═{'═'*d_width}═╗"
+    header = f"{TITLE}║ Name{' '*(n_width-4)} ║ {data_name}{' '*(d_width-len(data_name))} ║"
+    mid = f"{TITLE}╠═{'═'*n_width}═╬═{'═'*d_width}═╣"
+    bottom = f"{TITLE}╚═{'═'*n_width}═╩═{'═'*d_width}═╝"
+
+    rows = [
+        top,
+        header,
+        mid,
+        *[f"{TITLE}║ {VAL}{name}{TITLE} ║ {VAL}{line:<{d_width}}{TITLE} ║" for line in data],
+        bottom
+    ]
+
+    return "\n".join(rows)    
+
 
 @input_error
 def show_phone(book: AddressBook, *args):
@@ -77,26 +97,10 @@ def show_phone(book: AddressBook, *args):
     if record is None:
         return ERROR + not_found_message
 
-    phones = [f"📞 {p.value}" for p in record.phones] or ["No phones"]
-    width = max(len(x) for x in phones)
-
-    phones = pad_lines(phones, width)
-
-    top = f"{TITLE}╔════════════════════╦═{'═'*width}╗"
-    header = f"{TITLE}║ Name               ║ Phones{' '*(width-6)}║"
-    mid = f"{TITLE}╠════════════════════╬═{'═'*width}╣"
-    bottom = f"{TITLE}╚════════════════════╩═{'═'*width}╝"
-
-    rows = [
-        top,
-        header,
-        mid,
-        *[f"║ {VAL}{name:<18}{RESET} ║ {VAL}{line}{RESET} ║" for line in phones],
-        bottom
-    ]
-
-    return "\n".join(rows)
-
+    phones = [f" {p.value} " for p in record.phones] or ["No phones"]
+    name = record.get_print_name()
+    
+    return draw_small_table(name, 'Phones', phones)
 
 
 @input_error
@@ -284,25 +288,10 @@ def show_email(book: AddressBook, *args):
     if record is None:
         return ERROR + "Contact not found"
 
-    emails = [f"✉️ {e.value}" for e in record.emails] or ["No emails"]
-    width = max(len(x) for x in emails)
-    emails = pad_lines(emails, width)
-
-    top = f"{TITLE}╔════════════════════╦═{'═'*width}╗"
-    header = f"{TITLE}║ Name               ║ Emails{' '*(width-6)}║"
-    mid = f"{TITLE}╠════════════════════╬═{'═'*width}╣"
-    bottom = f"{TITLE}╚════════════════════╩═{'═'*width}╝"
-
-    rows = [
-        top,
-        header,
-        mid,
-        *[f"║ {VAL}{name:<18}{RESET} ║ {VAL}{line}{RESET} ║" for line in emails],
-        bottom
-    ]
-
-    return "\n".join(rows)
-
+    emails = [f" {e.value}" for e in record.emails] or ["No emails"]
+    name = record.get_print_name()
+    
+    return draw_small_table(name, 'Emails', emails)
 
 @input_error
 def add_birthday(book: AddressBook, *args):
