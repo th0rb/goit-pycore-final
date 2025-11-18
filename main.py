@@ -137,8 +137,8 @@ def main():
                     best = (c, score)
         return best
 
-    def execute_suggestion(suggestion: str, user_input: str):
-        exec_args = [suggestion, user_input]
+    def execute_suggestion(suggestion: str, user_input: list[str]):
+        exec_args = [suggestion, *user_input]
 
         if suggestion in ADDR_BOOK_COMMANDS:
             return ADDR_BOOK_COMMANDS[suggestion](book, *exec_args)
