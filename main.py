@@ -137,16 +137,17 @@ def main():
                     best = (c, score)
         return best
 
-    def execute_suggestion(suggestion: str, user_input: list[str]):
-        exec_args = [suggestion, *user_input]
-
+    def execute_suggestion(suggestion: str, exec_args: list[str]):
         if suggestion in ADDR_BOOK_COMMANDS:
             return ADDR_BOOK_COMMANDS[suggestion](book, *exec_args)
         if suggestion in NOTES_COMMANDS:
             return NOTES_COMMANDS[suggestion](notes_book, *exec_args)
         if suggestion in HELPER_COMMANDS:
-            return HELPER_COMMANDS[suggestion](*exec_args)
-        return 'Unknown command' 
+            # helpers usually take no args; if exec_args is empty call without args
+            if exec_args:
+                return HELPER_COMMANDS[suggestion](*exec_args)
+            return HELPER_COMMANDS[suggestion]()
+        return 'Unknown command'
 
     session = build_session()
 
