@@ -1,6 +1,7 @@
 import sys
 import os
 import difflib
+import re
 try:
     from prompt_toolkit import PromptSession
     from prompt_toolkit.completion import WordCompleter
@@ -136,20 +137,8 @@ def main():
                     best = (c, score)
         return best
 
-    def execute_suggestion(suggestion: str, user_input: str, args: list[str]):
-        aliases = list(canonical_forms(suggestion))
-        lowered = user_input.lower()
-        remainder = lowered
-        for a in sorted(aliases, key=len, reverse=True):
-            if remainder.startswith(a):
-                remainder = remainder[len(a):].strip()
-                break
-            idx = remainder.find(a)
-            if idx != -1:
-                remainder = (remainder[:idx] + remainder[idx+len(a):]).strip()
-                break
-
-        exec_args = remainder.split() if remainder else args
+    def execute_suggestion(suggestion: str, user_input: str):
+        exec_args = [suggestion, user_input]
 
         if suggestion in ADDR_BOOK_COMMANDS:
             return ADDR_BOOK_COMMANDS[suggestion](book, *exec_args)
@@ -157,7 +146,7 @@ def main():
             return NOTES_COMMANDS[suggestion](notes_book, *exec_args)
         if suggestion in HELPER_COMMANDS:
             return HELPER_COMMANDS[suggestion](*exec_args)
-        return 'Unknown command'
+        return 'Unknown command' 
 
     session = build_session()
 
@@ -185,6 +174,33 @@ def main():
             if command in HELPER_COMMANDS:
                 print(HELPER_COMMANDS[command](*args))
                 continue
+
+            suggestion, score = guess_command(user_input)
+            if suggestion and score >= 0.6:
+                suggested_cmd = f"{suggestion}"
+                print(f"Можливо ви мали на увазі: {Fore.YELLOW}{suggested_cmd}{Style.RESET_ALL}")
+
+                confirm = input("Підтвердити команду? (y/n):").strip().lower()
+
+                if confirm in ('y', 'yes'):
+                    # Show suggested command as a prefill and allow the user to edit it.
+                    prefill = f"{suggestion} {' '.join(args)}".strip()
+                    resp = input(f"{Fore.YELLOW}Suggested: {Style.RESET_ALL} {prefill}\nPress Enter to accept or type corrected command: ").strip()
+                    final_input = resp if resp else prefill
+                    cmd, *new_args = parse_input(final_input)
+
+                    # If user edited the command name, run that command directly if it exists.
+                    if cmd in ADDR_BOOK_COMMANDS:
+                        print(ADDR_BOOK_COMMANDS[cmd](book, *new_args))
+                    elif cmd in NOTES_COMMANDS:
+                        print(NOTES_COMMANDS[cmd](notes_book, *new_args))
+                    elif cmd in HELPER_COMMANDS:
+                        print(HELPER_COMMANDS[cmd](*new_args))
+                    else:
+                        # Otherwise assume they accepted the suggested command and pass args.
+                        print(execute_suggestion(suggestion, new_args))
+                else:
+                    print("Дія скасована користувачем.")
             else:
                 wrong_command()
 
